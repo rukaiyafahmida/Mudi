@@ -26,7 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Mudi_DataAccess\Mudi_DataAccess.csproj" />
-    <ProjectReference Include="..\Mudi_Model\Mudi_Model.csproj" />
+    <ProjectReference Include="..\Mudi_Model\Mudi_Models.csproj" />
     <ProjectReference Include="..\Mudi_Utility\Mudi_Utility.csproj" />
   </ItemGroup>
 

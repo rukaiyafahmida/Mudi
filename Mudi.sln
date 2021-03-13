@@ -5,11 +5,11 @@ VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mudi", "Mudi\Mudi.csproj", "{4CED4AEB-4619-4F88-8C6D-10DB27166DA8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mudi_Model", "Mudi_Model\Mudi_Model.csproj", "{1C6166D3-3576-44D8-863A-B51DC6A623E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mudi_Models", "Mudi_Model\Mudi_Models.csproj", "{1C6166D3-3576-44D8-863A-B51DC6A623E7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mudi_DataAccess", "Mudi_DataAccess\Mudi_DataAccess.csproj", "{2D726BEA-095A-473E-88F5-1230E082BA15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mudi_Utility", "Mudi_Utility\Mudi_Utility.csproj", "{4DA55EDC-A7E8-43A2-B8DE-14F36F9D79D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mudi_Utility", "Mudi_Utility\Mudi_Utility.csproj", "{4DA55EDC-A7E8-43A2-B8DE-14F36F9D79D9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
