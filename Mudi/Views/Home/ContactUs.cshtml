@@ -1,0 +1,79 @@
+﻿@model Mudi_Models.ViewModels.ContactUsVM
+
+<h1>Contact Us</h1>
+<section class="mb-4">
+
+    <div class="row">
+        <!--Form column-->
+        <div class="col-md-9 mb-md-0 mb-5">
+            <form method="post">
+
+                <div class="row">
+                    <!--Name-->
+
+                    <div class="col-md-6">
+                        <div class="md-form mb-0 pt-2">
+                            <label>Name</label>
+                            <input asp-for="ApplicationUser.FullName" type="text" class="form-control" />
+                            <span asp-validation-for="ApplicationUser.FullName" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <!--Name-->
+                    <!--phone no-->
+                    <div class="col-md-6">
+                        <div class="md-form mb-0 pt-2">
+                            <label>Phone</label>
+                            <input asp-for="ApplicationUser.PhoneNumber" type="text" class="form-control" />
+                            <span asp-validation-for="ApplicationUser.PhoneNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <!--phone no-->
+                    <!--Email-->
+                    <div class="col-md-6">
+                        <div class="md-form mb-0 pt-2">
+                            <label>Email</label>
+                            <input asp-for="ApplicationUser.Email" type="text" class="form-control" />
+                            <span asp-validation-for="ApplicationUser.Email" class="text-danger"></span>
+
+                        </div>
+                    </div>
+                    <!--Email-->
+                </div>
+
+                <!--Subject-->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="md-form mb-0 pt-2">
+                            <label for="subject" class="">Subject:</label>
+                            <input type="text" id="subject" name="subject" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <!--!Subject-->
+                <!--Message-->
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <div class="md-form pt-2">
+                            <label for="message">Message:</label>
+                            <textarea type="text" id="message" name="message" rows="5" class="form-control md-textarea"></textarea>
+                        </div>
+
+                    </div>
+                </div>
+                <!--!Message-->
+                <!--Submit Button-->
+                <div class="text-center text-md-left pt-2">
+                    <button type="submit" class="btn btn-success form-control ">
+                        <span>Send</span>
+                    </button>
+                </div>
+                <!--Submit Button-->
+            </form>
+        </div>
+        <!--!Form column-->
+
+    </div>
+
+</section>
