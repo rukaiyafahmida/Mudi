@@ -9,7 +9,6 @@ namespace Mudi_Models.ViewModels
     {
         public IEnumerable<Product> Products { get; set; }
         public IEnumerable<Category> Categories { get; set; }
-
-       // public IEnumerable<Order> Order { get; set; }
+        public IEnumerable<OrderHeader> OrderHList { get; set; }
     }
 }

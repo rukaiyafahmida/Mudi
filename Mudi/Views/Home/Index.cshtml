@@ -1,4 +1,5 @@
 ﻿@model Mudi_Models.ViewModels.HomeVM
+@using Mudi_Utility
 
 @if (User.IsInRole(Mudi_Utility.WC.AdminRole))
 {
@@ -15,7 +16,7 @@
                 categoryCount++;
             }
             <p class="card-text text-center">@categoryCount</p>
-            <a asp-controller="Category" asp-action="Index" class="btn btn-primary stretched-link">View Category</a>
+            <a asp-controller="Category" asp-action="Index" class="btn w-100 btn-primary stretched-link">View Category</a>
         </div>
     </div>
     <div class="card">
@@ -30,16 +31,23 @@
                 prodCount++;
             }
             <p class="card-text text-center">@prodCount</p>
-            <a asp-controller="Product" asp-action="Index" class="btn btn-primary stretched-link">View Product</a>
+            <a asp-controller="Product" asp-action="Index" class="btn w-100 btn-primary stretched-link">View Product</a>
         </div>
     </div>
     <div class="card">
         @*<img class="card-img-top" src="..." alt="Card image cap">*@
         <div class="card-body">
             <h5 class="card-title text-center">Order</h5>
-
-            <p class="card-text text-center">57</p>
-            <a asp-controller="Order" asp-action="Index" class="btn btn-primary stretched-link">View Order</a>
+            @{
+                var orderCount = 0;
+            }
+            @foreach (var ord in Model.OrderHList)
+            {
+                if(ord.OrderStatus != WC.StatusCancelled && ord.OrderStatus != WC.StatusCompleted )
+                    orderCount++;
+            }
+            <p class="card-text text-center">@orderCount</p>
+            <a asp-controller="Order" asp-action="Index" class="btn w-100 btn-primary stretched-link">View Order</a>
 
         </div>
     </div>

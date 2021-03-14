@@ -20,12 +20,13 @@ namespace Mudi_Utility
 
         public const string StatusPending = "Pending";
         public const string StatusInProcess = "Processing";
+        public const string StatusCompleted = "Completed";
         public const string StatusShipped = "Shipped";
         public const string StatusCancelled = "Cancelled";
         public static readonly IEnumerable<string> listStatus = new ReadOnlyCollection<string>(
            new List<string>
            {
-                StatusCancelled,StatusInProcess,StatusPending,StatusShipped
+                StatusCompleted,StatusCancelled,StatusInProcess,StatusPending,StatusShipped
            });
         //public static string SessionInquiryId { get; set; }
     }

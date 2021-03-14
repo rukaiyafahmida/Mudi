@@ -26,6 +26,7 @@ namespace Mudi.Controllers
         private readonly IEmailSender _emailSender;
 
         private readonly IProductRepository _prodRepo;
+        private readonly IOrderHeaderRepository _orderHRepo;
         private readonly ICategoryRepository _catRepo;
         private readonly IApplicationUserRepository _userRepo;
         
@@ -35,7 +36,7 @@ namespace Mudi.Controllers
         public ContactUsVM ContactUsVM { get; set; }
 
         public HomeController(ILogger<HomeController> logger, IProductRepository prodRepo,
-            ICategoryRepository catRepo, IApplicationUserRepository userRepo,
+            ICategoryRepository catRepo, IApplicationUserRepository userRepo, IOrderHeaderRepository orderHRepo,
             IWebHostEnvironment webHostEnvironment, IEmailSender emailSender)
         {
             _logger = logger;
@@ -44,6 +45,7 @@ namespace Mudi.Controllers
             _catRepo = catRepo;
             _webHostEnvironment = webHostEnvironment;
             _emailSender = emailSender;
+            _orderHRepo = orderHRepo;
         }
 
         public IActionResult Index()
@@ -51,7 +53,9 @@ namespace Mudi.Controllers
             HomeVM homeVM = new HomeVM()
             {
                 Products = _prodRepo.GetAll(includeProperties: "Category"),
-                Categories = _catRepo.GetAll()
+                Categories = _catRepo.GetAll(),
+                OrderHList =_orderHRepo.GetAll()
+
             };
             return View(homeVM);
         }

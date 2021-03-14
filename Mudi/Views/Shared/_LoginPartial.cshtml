@@ -11,9 +11,6 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link " asp-area="" asp-controller="WishList" asp-action="Index">Wish List</a>
-        </li>
-        <li class="nav-item">
             <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
                 <button id="logout" type="submit" class="nav-link btn btn-link">Logout</button>
             </form>

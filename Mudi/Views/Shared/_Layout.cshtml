@@ -54,8 +54,15 @@
                                 </div>
                             </li>
                         }
+
                         else
                         {
+                            @if (User.IsInRole(WC.CustomerRole))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link " asp-area="" asp-controller="WishList" asp-action="Index">Wish List</a>
+                                </li>
+                            }
                             <li class="nav-item">
                                 <a class="nav-link " asp-area="" asp-controller="Home" asp-action="ContactUs">Contact Us</a>
                             </li>
