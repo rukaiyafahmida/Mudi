@@ -15,25 +15,33 @@ using System.Security.Claims;
 using System.IO;
 using System.Text;
 using Mudi_DataAccess;
+using Mudi_DataAccess.Repository.IRepository;
 
 namespace Mudi.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly ApplicationDbContext _db;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IEmailSender _emailSender;
 
+        private readonly IProductRepository _prodRepo;
+        private readonly ICategoryRepository _catRepo;
+        private readonly IApplicationUserRepository _userRepo;
+        
         [BindProperty]
         public ProductUserVM ProductUserVM { get; set; }
         [BindProperty]
         public ContactUsVM ContactUsVM { get; set; }
 
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext db, IWebHostEnvironment webHostEnvironment, IEmailSender emailSender)
+        public HomeController(ILogger<HomeController> logger, IProductRepository prodRepo,
+            ICategoryRepository catRepo, IApplicationUserRepository userRepo,
+            IWebHostEnvironment webHostEnvironment, IEmailSender emailSender)
         {
             _logger = logger;
-            _db = db;
+            _userRepo = userRepo;
+            _prodRepo = prodRepo;
+            _catRepo = catRepo;
             _webHostEnvironment = webHostEnvironment;
             _emailSender = emailSender;
         }
@@ -42,8 +50,8 @@ namespace Mudi.Controllers
         {
             HomeVM homeVM = new HomeVM()
             {
-                Products = _db.Product.Include(u => u.Category),
-                Categories = _db.Category
+                Products = _prodRepo.GetAll(includeProperties: "Category"),
+                Categories = _catRepo.GetAll()
             };
             return View(homeVM);
         }
@@ -60,8 +68,7 @@ namespace Mudi.Controllers
 
             DetailsVM DetailsVM = new DetailsVM()
             {
-                Product = _db.Product.Include(u => u.Category)
-                .Where(u => u.Id == id).FirstOrDefault(),
+                Product = _prodRepo.FirstOrDefault(u => u.Id == id, includeProperties: "Category"),
                 ExistsInCart = false
             };
 
@@ -77,7 +84,7 @@ namespace Mudi.Controllers
             return View(DetailsVM);
         }
         [HttpPost, ActionName("Details")]
-        public IActionResult DetailsPost(int id)
+        public IActionResult DetailsPost(int id, DetailsVM detailsVM)
         {
             List<ShoppingCart> shoppingCartList = new List<ShoppingCart>();
             if (HttpContext.Session.Get<IEnumerable<ShoppingCart>>(WC.SessionCart) != null
@@ -85,7 +92,7 @@ namespace Mudi.Controllers
             {
                 shoppingCartList = HttpContext.Session.Get<List<ShoppingCart>>(WC.SessionCart);
             }
-            shoppingCartList.Add(new ShoppingCart { ProductId = id });
+            shoppingCartList.Add(new ShoppingCart { ProductId = id, Qty = detailsVM.Product.TempQty });
             HttpContext.Session.Set(WC.SessionCart, shoppingCartList);
             return RedirectToAction(nameof(Index));
         }
@@ -109,6 +116,8 @@ namespace Mudi.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
+
         public IActionResult Privacy()
         {
             return View();
@@ -124,8 +133,8 @@ namespace Mudi.Controllers
             //var userId = User.FindFirstValue(ClaimTypes.Name);
             ContactUsVM = new ContactUsVM();
             if(claim !=null)
-            ContactUsVM.ApplicationUser = _db.ApplicationUser.FirstOrDefault(u => u.Id == claim.Value);
-            
+            ContactUsVM.ApplicationUser = _userRepo.FirstOrDefault(u => u.Id == claim.Value);
+
             return View(ContactUsVM);
         }
 

@@ -19,5 +19,8 @@ namespace Mudi_DataAccess
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
         public DbSet<WishListHeader> WishListHeader { get; set; }
         public DbSet<WishListDetail> WishListDetail { get; set; }
+
+        public DbSet<OrderHeader> OrderHeader { get; set; }
+        public DbSet<OrderDetail> OrderDetail { get; set; }
     }
 }

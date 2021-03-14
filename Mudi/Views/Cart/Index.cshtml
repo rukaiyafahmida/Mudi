@@ -1,5 +1,5 @@
-﻿@model IEnumerable<Product>
-
+﻿@model List<Product>
+@using Mudi_Utility
 @if (Model.Count() > 0)
 {
 
@@ -16,6 +16,7 @@
                                 Shopping Cart
                             </div>
                             <div class="col-6 text-right">
+                                <a asp-action="Clear" class="btn btn-outline-warning btn-sm">Clear Cart</a>
                                 <a asp-action="Index" asp-controller="Home" class="btn btn-outline-info btn-sm">Continue Shopping</a>
                             </div>
                         </div>
@@ -24,46 +25,85 @@
                                 <div class="row" style="color:#821f3d">
                                     <div class="col-lg-2">
                                     </div>
-                                    <div class="col-12 col-lg-7">
+
+                                    <div class="col-12 col-lg-3">
                                         Product Details
                                     </div>
+
                                     <div class="col-12 col-lg-2">
                                         Price per Unit
                                     </div>
+                                    <div class="col-6 col-lg-2">
+                                        Qty
+                                    </div>
+                                    <div class="col-6 col-lg-2">
+                                        Total Price
+                                    </div>
+
                                     <div class="col-6 col-sm-4 col-lg-1">
                                     </div>
                                 </div>
                             </div>
 
                             <hr />
-                            @foreach (var obj in Model)
+                            @{
+                                var orderTotal = 0.0;
+                            }
+                            @for (int i = 0; i < Model.Count(); i++)
                             {
+                                <input hidden asp-for="@Model[i].Id" />
                                 <div class="row h-100">
                                     <div class="col-4 col-md-2 text-center py-2">
-                                        <img src="@Mudi_Utility.WC.ImagePath@obj.Image" class="rounded" width="100%" />
+                                        <img src="@WC.ImagePath@Model[i].Image" class="rounded" width="100%" />
                                     </div>
-                                    <div class="col-8 col-lg-7">
-                                        <h5>@obj.Name</h5>
-                                        <div style="font-size:11px;">@obj.ShortDescription</div>
+
+                                    <div class="col-8 col-lg-3">
+                                        <h5>@Model[i].Name</h5>
+                                        <div style="font-size:11px;">@Model[i].ShortDescription</div>
                                     </div>
                                     <div class="col-3 col-lg-2 pt-lg-4" style="font-size:11px;">
-                                        <span style="font-size:17px;"> ৳@obj.Price</span>/ @obj.Unit
+                                        <span style="font-size:17px;"> ৳ @Model[i].Price</span>/ @Model[i].Unit
+                                        @*what to do with the unit*@
 
                                     </div>
+
+                                    <div class="col-4 col-lg-2 pt-lg-4" style="font-size:11px;">
+                                        <input type="text" asp-for="@Model[i].TempQty" class="form-control" />
+                                    </div>
+                                    <div class="col-3 col-lg-2 pt-lg-4" style="font-size:11px;">
+                                        <span style="font-size:17px;"> ৳ @(Model[i].Price* Model[i].TempQty)</span>
+
+                                    </div>
+
                                     <div class="col-2 col-lg-1 p-0 pt-lg-4 text-center">
-                                        <a asp-action="Remove" asp-route-id="@obj.Id" class="btn btn-outline-danger">
+                                        <a asp-action="Remove" asp-route-id="@Model[i].Id" class="btn btn-outline-danger">
                                             <i class="fas fa-trash"></i>
                                         </a>
                                     </div>
                                 </div>
+                                orderTotal += Model[i].Price * Model[i].TempQty;
                                 <hr />
                             }
+
+                            <div class="row">
+                                <div class="col-12 text-right pr-4" style="color:#821f3d">
+                                    Order Total : ৳ @orderTotal
+                                </div>
+                            </div>
+
                         </div>
                         <div class="card-footer">
                             <div class="row">
-                                <div class="col-6 col-md-3 offset-md-9">
+
+                                <div class="col-6 col-md-3 offset-md-6">
+
+                                    <input type="submit" asp-action="UpdateCart" formmethod="post" name="Update" value="Update Cart"
+                                           class="btn btn-info form-control" />
+
+                                </div>
+                                <div class="col-6 col-md-3">
                                     <button type="submit" class="btn btn-success form-control ">
-                                        <span>Proceed to Checkout</span>
+                                        <span>Continue</span>
                                     </button>
                                 </div>
                             </div>
@@ -74,7 +114,6 @@
         </div>
     </form>
 }
-
 else
 {
     <p>Please add items to cart.</p>

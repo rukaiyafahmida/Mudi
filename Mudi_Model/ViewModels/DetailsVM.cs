@@ -7,6 +7,7 @@ namespace Mudi_Models.ViewModels
 {
     public class DetailsVM
     {
+       // public WishListVM WishListVM { get; set; }
         public DetailsVM()
         {
             Product = new Product();

@@ -9,6 +9,10 @@ namespace Mudi_Models
 {
     public class Product
     {
+        public Product()
+        {
+            TempQty = 1;
+        }
         [Key]
         public int Id { get; set; }
 
@@ -37,7 +41,9 @@ namespace Mudi_Models
         [ForeignKey("CategoryId")]
         public virtual Category Category { get; set; }
 
-
+        [NotMapped]
+        [Range(1, 100, ErrorMessage = "Quantity must be greater than 0")]
+        public int TempQty { get; set; }
 
 
     }

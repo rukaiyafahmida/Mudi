@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,5 +17,16 @@ namespace Mudi_Utility
         public const string EmailAdmin = "170204001@aust.edu";
 
         public const string CategoryName = "Category";
+
+        public const string StatusPending = "Pending";
+        public const string StatusInProcess = "Processing";
+        public const string StatusShipped = "Shipped";
+        public const string StatusCancelled = "Cancelled";
+        public static readonly IEnumerable<string> listStatus = new ReadOnlyCollection<string>(
+           new List<string>
+           {
+                StatusCancelled,StatusInProcess,StatusPending,StatusShipped
+           });
+        //public static string SessionInquiryId { get; set; }
     }
 }
