@@ -34,6 +34,7 @@ namespace Mudi.Controllers
         public ProductUserVM ProductUserVM { get; set; }
         [BindProperty]
         public ContactUsVM ContactUsVM { get; set; }
+        public OrderListVM OrderListVM { get; set; }
 
         public HomeController(ILogger<HomeController> logger, IProductRepository prodRepo,
             ICategoryRepository catRepo, IApplicationUserRepository userRepo, IOrderHeaderRepository orderHRepo,
