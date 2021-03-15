@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -28,6 +28,9 @@ namespace Mudi_Utility
            {
                 StatusCompleted,StatusCancelled,StatusInProcess,StatusPending,StatusShipped
            });
+
+        public const string Success = "Success";
+        public const string Error = "Error";
         //public static string SessionInquiryId { get; set; }
     }
 }
