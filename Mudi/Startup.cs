@@ -59,6 +59,12 @@ namespace Mudi
             services.AddScoped<IOrderHeaderRepository, OrderHeaderRepository>();
             services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
 
+            services.AddAuthentication().AddFacebook(Options =>
+            {
+                Options.AppId = "339788990810019";
+                Options.AppSecret = "423f11f6692a5151bf16004bd8727be0";
+            });
+
             services.AddControllersWithViews();
         }
 
