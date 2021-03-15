@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Mudi_DataAccess.Repository.IRepository;
 using Mudi_DataAccess;
@@ -45,8 +45,10 @@ namespace Mudi.Controllers
             {
                 _catRepo.Add(obj);
                 _catRepo.Save();
+                TempData[WC.Success] = "Category created successfully";
                 return RedirectToAction("Index");
             }
+            TempData[WC.Error] = "Error while creating category";
             return View(obj);
         }
 
@@ -75,8 +77,10 @@ namespace Mudi.Controllers
             {
                 _catRepo.Update(obj);
                 _catRepo.Save();
+                TempData[WC.Success] = "Category Edited successfully";
                 return RedirectToAction("Index");
             }
+            TempData[WC.Error] = "Error while editing category";
             return View(obj);
 
         }
@@ -109,6 +113,7 @@ namespace Mudi.Controllers
             }
             _catRepo.Remove(obj);
             _catRepo.Save();
+            TempData[WC.Success] = "Category deleted successfully";
             return RedirectToAction("Index");
 
 
