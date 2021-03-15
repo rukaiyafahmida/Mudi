@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Mudi_Models;
@@ -99,6 +99,7 @@ namespace Mudi.Controllers
             }
             shoppingCartList.Add(new ShoppingCart { ProductId = id, Qty = detailsVM.Product.TempQty });
             HttpContext.Session.Set(WC.SessionCart, shoppingCartList);
+            TempData[WC.Success] = "Item add to cart successfully";
             return RedirectToAction(nameof(Index));
         }
 
@@ -118,6 +119,7 @@ namespace Mudi.Controllers
             }
 
             HttpContext.Session.Set(WC.SessionCart, shoppingCartList);
+            TempData[WC.Success] = "Item removed from cart successfully";
             return RedirectToAction(nameof(Index));
         }
 
