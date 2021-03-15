@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Mudi_Models;
@@ -166,6 +166,7 @@ namespace Mudi.Controllers
 
                 }
                 _orderDRepo.Save();
+                TempData[WC.Success] = "Inquiry submitted successfully";
                 return RedirectToAction(nameof(InquiryConfirmation), new { id = orderHeader.Id });
 
 
