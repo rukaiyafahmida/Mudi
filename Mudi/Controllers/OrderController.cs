@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Mudi_DataAccess.Repository.IRepository;
 using Mudi_Models;
 using Mudi_Models.ViewModels;
@@ -78,6 +78,7 @@ namespace Mudi.Controllers
             OrderHeader orderHeader = _orderHRepo.FirstOrDefault(u => u.Id == OrderVM.OrderHeader.Id);
             orderHeader.OrderStatus = WC.StatusInProcess;
             _orderHRepo.Save();
+            TempData[WC.Success] = "Action completed successfully";
             return RedirectToAction(nameof(Index));
         }
 
@@ -88,6 +89,7 @@ namespace Mudi.Controllers
             orderHeader.OrderStatus = WC.StatusShipped;
             orderHeader.ShippingDate = DateTime.Now;
             _orderHRepo.Save();
+            TempData[WC.Success] = "Action completed successfully";
             return RedirectToAction(nameof(Index));
         }
         [HttpPost]
@@ -96,6 +98,7 @@ namespace Mudi.Controllers
             OrderHeader orderHeader = _orderHRepo.FirstOrDefault(u => u.Id == OrderVM.OrderHeader.Id);
             orderHeader.OrderStatus = WC.StatusCancelled;
             _orderHRepo.Save();
+            TempData[WC.Success] = "Action completed successfully";
             return RedirectToAction(nameof(Index));
         }
         [HttpPost]
@@ -104,7 +107,7 @@ namespace Mudi.Controllers
             OrderHeader orderHeader = _orderHRepo.FirstOrDefault(u => u.Id == OrderVM.OrderHeader.Id);
             orderHeader.OrderStatus = WC.StatusCompleted;
             _orderHRepo.Save();
-
+            TempData[WC.Success] = "Action completed successfully";
             //foreach(OrderDetail detail in orderVM.OrderDetail)
             //{
             //    Product prodTemp = _prodRepo.FirstOrDefault(x => x.Id == detail.ProductId);
