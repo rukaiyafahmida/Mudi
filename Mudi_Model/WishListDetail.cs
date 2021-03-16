@@ -14,9 +14,9 @@ namespace Mudi_Models
         public int Id { get; set; }
 
         [Required]
-        public int WishListHeaderId { get; set; }
-        [ForeignKey("WishListHeaderId")]
-        public WishListHeader WishListHeader { get; set; }
+        public string ApplicationUserId { get; set; }
+        [ForeignKey("ApplicationUserId")]
+        public ApplicationUser ApplicationUser { get; set; }
 
         [Required]
         public int ProductId { get; set; }

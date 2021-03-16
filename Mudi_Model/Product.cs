@@ -12,6 +12,7 @@ namespace Mudi_Models
         public Product()
         {
             TempQty = 1;
+            isInWishList = false;
         }
         [Key]
         public int Id { get; set; }
@@ -44,6 +45,9 @@ namespace Mudi_Models
         [NotMapped]
         [Range(1, 100, ErrorMessage = "Quantity must be greater than 0")]
         public int TempQty { get; set; }
+
+        [NotMapped]
+        public bool isInWishList { get; set; }
 
 
     }

@@ -57,7 +57,7 @@
                             @if (User.IsInRole(Mudi_Utility.WC.CustomerRole))
                             {
                                 <a class="btn btn-success form-control btn-lg"
-                                   asp-controller="WishList" asp-action="Index" asp-route-id="@Model.Product.Id" class="btn w-100 btn-success">
+                                   asp-controller="WishList" asp-action="Add" asp-route-id="@Model.Product.Id" class="btn w-100 btn-success">
                                     Add to Wishlist
                                 </a>
                             }

@@ -35,6 +35,11 @@ namespace Mudi.Controllers
 
         [BindProperty]
         public ProductUserVM ProductUserVM { get; set; }
+        [BindProperty]
+        public OrderVM OrderVM { get; set; }
+        [BindProperty]
+        public ProductVM ProductVM { get; set; }
+
         public CartController(IApplicationUserRepository userRepo, IProductRepository prodRepo,
             IWishListHedaerRepository wishHRepo, IWishListDetailRepository wishDRepo,
             IOrderHeaderRepository orderHRepo, IOrderDetailRepository orderDRepo,
@@ -206,8 +211,9 @@ namespace Mudi.Controllers
             //return RedirectToAction(nameof(InquiryConfirmation));
 
         }
-        public IActionResult InquiryConfirmation()
+        public IActionResult InquiryConfirmation(OrderVM orderVM)
         {
+
             HttpContext.Session.Clear();
             return View();
         }
