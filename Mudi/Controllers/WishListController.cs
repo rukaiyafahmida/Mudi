@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Mudi_Utility;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Mudi.Controllers
 {
@@ -37,6 +38,7 @@ namespace Mudi.Controllers
             return View();
         }
        // [HttpPost]
+       [Authorize]
         public IActionResult Add(int id)
 
         {
@@ -44,6 +46,7 @@ namespace Mudi.Controllers
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
+            
             WishListDetail obj = new WishListDetail();
             obj=_wishDRepo.FirstOrDefault(u => u.ApplicationUserId == claim.Value && u.ProductId == id);
             if(obj == null) //product is not in wishlist of the user
@@ -54,25 +57,14 @@ namespace Mudi.Controllers
                 _wishDRepo.Add(obj1);
                 _wishDRepo.Save();
                 TempData[WC.Success] = "Added to WishList successfully";
-                return RedirectToAction("Index");
+              
+            }
+            else
+            {
+                TempData[WC.Error] = "Already In WishList";
             }
             
-
-            //else //already has a wishlist
-            //{
-
-            //}
-
-
-            //if (ModelState.IsValid)
-            //{
-            //    _wishDRepo.Add(obj);
-            //    _wishDRepo.Save();
-            //    TempData[WC.Success] = "Added to WishList successfully";
-            //    return RedirectToAction("Index");
-            //}
-            //return RedirectToAction(nameof(Index));
-            return RedirectToAction("Index");
+        return RedirectToAction("Index");
         }
     }
 }

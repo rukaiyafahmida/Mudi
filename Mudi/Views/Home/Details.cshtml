@@ -52,27 +52,24 @@
                 </div>
                 <div class="card-footer bg-dark">
                     <div class="row">
-                        <div class="col-12 col-md-6 pb-1 ">
+                        <div class="col-12 col-md-4 ">
 
-                            @if (User.IsInRole(Mudi_Utility.WC.CustomerRole))
-                            {
-                                <a class="btn btn-success form-control btn-lg"
-                                   asp-controller="WishList" asp-action="Add" asp-route-id="@Model.Product.Id" class="btn w-100 btn-success">
-                                    Add to Wishlist
+                                <a class="btn btn-danger w-100 form-control btn-lg"
+                                   asp-controller="WishList" asp-action="Add" asp-route-id="@Model.Product.Id">
+                                    Add to Wishlist <i class="far fa-heart"></i>
                                 </a>
-                            }
-                            else
-                            {
-
-                                <a class="btn btn-success form-control btn-lg"
-                                   asp-controller="Home" asp-action="Index" class="btn w-100 btn-success">
-                                    Back to Products
-                                </a>
-                            }
-                            @*<input type="submit" value="Wishlist" class="btn btn-danger form-control"
-        formaction="/WishList/AddProductToWishList" formmethod="post" />*@
+                           
                         </div>
-                        <div class="col-12 col-md-6 ">
+
+                        <div class="col-12 col-md-4 ">
+
+                            <a class="btn w-100 btn-success form-control btn-lg"
+                               asp-controller="Home" asp-action="Index">
+                                Back to Products
+                            </a>
+                        </div>
+
+                        <div class="col-12 col-md-4 ">
                             @if (Model.ExistsInCart)
                             {
                                 <a asp-action="RemoveFromCart" asp-route-id="@Model.Product.Id" class="btn btn-warning btn-square form-control btn-lg" style="height:50px;">Remove from Cart</a>
