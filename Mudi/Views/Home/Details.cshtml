@@ -54,11 +54,23 @@
                     <div class="row">
                         <div class="col-12 col-md-6 pb-1 ">
 
-                            <button type="submit"  class="btn btn-info form-control btn-lg" 
-                                    formaction="/WishList/AddProductToWishList" formmethod="post"
-                                    style="height:50px;">Add to Wishlist</button>
+                            @if (User.IsInRole(Mudi_Utility.WC.CustomerRole))
+                            {
+                                <a class="btn btn-success form-control btn-lg"
+                                   asp-controller="WishList" asp-action="Index" asp-route-id="@Model.Product.Id" class="btn w-100 btn-success">
+                                    Add to Wishlist
+                                </a>
+                            }
+                            else
+                            {
+
+                                <a class="btn btn-success form-control btn-lg"
+                                   asp-controller="Home" asp-action="Index" class="btn w-100 btn-success">
+                                    Back to Products
+                                </a>
+                            }
                             @*<input type="submit" value="Wishlist" class="btn btn-danger form-control"
-                                   formaction="/WishList/AddProductToWishList" formmethod="post" />*@
+        formaction="/WishList/AddProductToWishList" formmethod="post" />*@
                         </div>
                         <div class="col-12 col-md-6 ">
                             @if (Model.ExistsInCart)

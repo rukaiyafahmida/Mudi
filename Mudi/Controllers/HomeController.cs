@@ -29,7 +29,10 @@ namespace Mudi.Controllers
         private readonly IOrderHeaderRepository _orderHRepo;
         private readonly ICategoryRepository _catRepo;
         private readonly IApplicationUserRepository _userRepo;
-        
+
+        private readonly IWishListHedaerRepository _wishHRepo;
+        private readonly IWishListDetailRepository _wishDRepo;
+
         [BindProperty]
         public ProductUserVM ProductUserVM { get; set; }
         [BindProperty]
@@ -75,6 +78,7 @@ namespace Mudi.Controllers
             {
                 Product = _prodRepo.FirstOrDefault(u => u.Id == id, includeProperties: "Category"),
                 ExistsInCart = false
+                
             };
 
 
