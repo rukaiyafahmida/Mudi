@@ -16,6 +16,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Mudi_DataAccess.Repository;
 using Mudi_DataAccess.Repository.IRepository;
+using Mudi_DataAccess.Initializer;
 
 namespace Mudi
 {
@@ -58,6 +59,7 @@ namespace Mudi
 
             services.AddScoped<IOrderHeaderRepository, OrderHeaderRepository>();
             services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
+            services.AddScoped<IDbInitializer, DbInitializer>();
 
             services.AddAuthentication().AddFacebook(Options =>
             {
@@ -69,7 +71,7 @@ namespace Mudi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env , IDbInitializer dbInitializer)
         {
             if (env.IsDevelopment())
             {
@@ -87,7 +89,7 @@ namespace Mudi
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-
+            dbInitializer.Initialize();
             app.UseSession();
 
             app.UseEndpoints(endpoints =>
