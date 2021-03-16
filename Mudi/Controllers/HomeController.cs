@@ -30,8 +30,6 @@ namespace Mudi.Controllers
         private readonly ICategoryRepository _catRepo;
         private readonly IApplicationUserRepository _userRepo;
 
-        private readonly IWishListHedaerRepository _wishHRepo;
-        private readonly IWishListDetailRepository _wishDRepo;
 
         [BindProperty]
         public ProductUserVM ProductUserVM { get; set; }

@@ -27,7 +27,6 @@ namespace Mudi.Controllers
         private readonly IApplicationUserRepository _userRepo;
         private readonly IProductRepository _prodRepo;
 
-        private readonly IWishListHedaerRepository _wishHRepo;
         private readonly IWishListDetailRepository _wishDRepo;
 
         private readonly IOrderHeaderRepository _orderHRepo;
@@ -41,7 +40,7 @@ namespace Mudi.Controllers
         public ProductVM ProductVM { get; set; }
 
         public CartController(IApplicationUserRepository userRepo, IProductRepository prodRepo,
-            IWishListHedaerRepository wishHRepo, IWishListDetailRepository wishDRepo,
+            IWishListDetailRepository wishDRepo,
             IOrderHeaderRepository orderHRepo, IOrderDetailRepository orderDRepo,
             IWebHostEnvironment webHostEnvironment, IEmailSender emailSender)
         {
@@ -51,7 +50,6 @@ namespace Mudi.Controllers
             _userRepo = userRepo;
             _prodRepo = prodRepo;
             _wishDRepo = wishDRepo;
-            _wishHRepo = wishHRepo;
             _orderDRepo = orderDRepo;
             _orderHRepo = orderHRepo;
         }

@@ -18,18 +18,16 @@ namespace Mudi.Controllers
         [BindProperty]
         public WishListVM WishListVM { get; set; }
 
-        private readonly IWishListHedaerRepository _wishHRepo;
         private readonly IWishListDetailRepository _wishDRepo;
         private readonly IApplicationUserRepository _userRepo;
         private readonly IProductRepository _prodRepo;
 
 
 
-        public WishListController(IWishListHedaerRepository wishHRepo, IWishListDetailRepository wishDRepo
+        public WishListController(IWishListDetailRepository wishDRepo
             , IProductRepository prodRepo, IApplicationUserRepository userRepo)
         {
             _wishDRepo = wishDRepo;
-            _wishHRepo = wishHRepo;
             _userRepo = userRepo;
             _prodRepo = prodRepo;
         }

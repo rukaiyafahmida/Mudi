@@ -32,6 +32,8 @@ namespace Mudi_Utility
         public const string Success = "Success";
 
         public const string Error = "Error";
+
+        public const string Info = "Info";
         //public static string SessionInquiryId { get; set; }
     }
 }

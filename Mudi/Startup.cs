@@ -54,7 +54,6 @@ namespace Mudi
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
 
-            services.AddScoped<IWishListHedaerRepository, WishListHedaerRepository>();
             services.AddScoped<IWishListDetailRepository, WishListDetailRepository>();
 
             services.AddScoped<IOrderHeaderRepository, OrderHeaderRepository>();
