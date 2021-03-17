@@ -65,12 +65,19 @@ namespace Mudi.Controllers
                 Products = _prodRepo.GetAll(includeProperties: "Category"),
                 Categories = _catRepo.GetAll(),
                 OrderHList = _orderHRepo.GetAll()
+
         };
             if (User.IsInRole(WC.CustomerRole))
             {
                 homeVM.CartList = _cartRepo.GetAll(u => u.ApplicationUserId == claim.Value);
                 homeVM.WishListItems = _wishDRepo.GetAll(u => u.ApplicationUserId == claim.Value);
 
+                List<ShoppingCart> shoppingCartList = new List<ShoppingCart>();
+                if (HttpContext.Session.Get<IEnumerable<ShoppingCart>>(WC.SessionCart) != null
+                    && HttpContext.Session.Get<IEnumerable<ShoppingCart>>(WC.SessionCart).Count() > 0)
+                {
+                    shoppingCartList = HttpContext.Session.Get<List<ShoppingCart>>(WC.SessionCart);
+                }
                 return View(homeVM);
             }
             else
