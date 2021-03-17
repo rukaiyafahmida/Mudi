@@ -33,14 +33,39 @@ namespace Mudi.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+            var objList = _wishDRepo.GetAll(u => u.ApplicationUserId == claim.Value).Join(_prodRepo.GetAll(),
+                                                                                             w => w.ProductId,
+                                                                                             p => p.Id,
+                                                                                             (wish, product) => new
+                                                                                             {
+                                                                                                 wishListId= wish.Id,
+                                                                                                 productName = product.Name,
+                                                                                                 productPrice = product.Price,
+                                                                                                 productStock=product.Stock
+                                                                                             });
+            List<WishListVM> WishListVM = new List<WishListVM>();
+
+            foreach (var details in objList)
+            {
+                WishListVM wishList = new WishListVM()
+                {
+                    Id= details.wishListId,
+                    ProductName=details.productName,
+                    UnitPrice=details.productPrice,
+                    Stock=details.productStock
+                };
+                WishListVM.Add(wishList);
+            }
+            return View(WishListVM);  
         }
+
        // [HttpPost]
        [Authorize]
         public IActionResult Add(int id)
-
         {
-
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
@@ -63,6 +88,21 @@ namespace Mudi.Controllers
             }
             
         return RedirectToAction("Index");
+        }
+        
+        public IActionResult Delete(int? id)
+        {
+            var obj = _wishDRepo.Find(id.GetValueOrDefault());
+            if (obj == null)
+            {
+                return NotFound();
+            }
+            _wishDRepo.Remove(obj);
+            _wishDRepo.Save();
+            TempData[WC.Success] = "Product Removed From WishList";
+            return RedirectToAction("Index");
+
+
         }
     }
 }

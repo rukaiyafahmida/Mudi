@@ -8,6 +8,9 @@ namespace Mudi_Models.ViewModels
 {
     public class WishListVM
     {
-        public IEnumerable<WishListDetail> WishListDetail { get; set; }
+        public int Id { get; set; }
+        public string ProductName { get; set; }
+        public int Stock { get; set; }
+        public double UnitPrice { get; set; }
     }
 }
