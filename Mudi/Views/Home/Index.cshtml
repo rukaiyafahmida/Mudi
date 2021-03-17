@@ -8,14 +8,8 @@
         @*<img class="card-img-top" src="..." alt="Card image cap">*@
         <div class="card-body">
             <h5 class="card-title text-center">Category</h5>
-            @{
-                var categoryCount = 0;
-            }
-            @foreach (var cat in Model.Categories)
-            {
-                categoryCount++;
-            }
-            <p class="card-text text-center">@categoryCount</p>
+            
+            <p class="card-text text-center">@Model.Categories.Count()</p>
             <a asp-controller="Category" asp-action="Index" class="btn w-100 btn-primary stretched-link">View Category</a>
         </div>
     </div>
@@ -23,14 +17,8 @@
         @*<img class="card-img-top" src="..." alt="Card image cap">*@
         <div class="card-body">
             <h5 class="card-title text-center">Product</h5>
-            @{
-                var prodCount = 0;
-            }
-            @foreach (var prod in Model.Products)
-            {
-                prodCount++;
-            }
-            <p class="card-text text-center">@prodCount</p>
+            
+            <p class="card-text text-center">@Model.Products.Count()</p>
             <a asp-controller="Product" asp-action="Index" class="btn w-100 btn-primary stretched-link">View Product</a>
         </div>
     </div>
@@ -38,15 +26,7 @@
         @*<img class="card-img-top" src="..." alt="Card image cap">*@
         <div class="card-body">
             <h5 class="card-title text-center">Order</h5>
-            @{
-                var orderCount = 0;
-            }
-            @foreach (var ord in Model.OrderHList)
-            {
-                if(ord.OrderStatus != WC.StatusCancelled && ord.OrderStatus != WC.StatusCompleted )
-                    orderCount++;
-            }
-            <p class="card-text text-center">@orderCount</p>
+            <p class="card-text text-center">@Model.OrderHList.Count(u=>u.OrderStatus!=WC.StatusCancelled && u.OrderStatus!=WC.StatusCompleted)</p>
             <a asp-controller="Order" asp-action="Index" class="btn w-100 btn-primary stretched-link">View Order</a>
 
         </div>
