@@ -110,7 +110,6 @@ namespace Mudi.Controllers
         [ActionName("Index")]
         public IActionResult IndexPost(IEnumerable<Product> ProdList)
         {
-
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             List<ShoppingCart> shoppingCartList = new List<ShoppingCart>();
@@ -155,8 +154,6 @@ namespace Mudi.Controllers
                 prodTemp.TempQty = cartObj.Qty;
                 ProductUserVM.ProductList.Add(prodTemp);
             }
-
-
 
             return View(ProductUserVM);
         }
@@ -214,6 +211,8 @@ namespace Mudi.Controllers
         }
         public IActionResult Remove(int id)
         {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
             List<ShoppingCart> shoppingCartList = new List<ShoppingCart>();
             if (HttpContext.Session.Get<IEnumerable<ShoppingCart>>(WC.SessionCart) != null
@@ -224,6 +223,7 @@ namespace Mudi.Controllers
             }
 
             shoppingCartList.Remove(shoppingCartList.FirstOrDefault(u => u.ProductId == id));
+            var obj = _cartRepo.FirstOrDefault(u => u.ApplicationUserId == claim.Value && u.ProductId == id);
             HttpContext.Session.Set(WC.SessionCart, shoppingCartList);
             return RedirectToAction(nameof(Index));
         }
