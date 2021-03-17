@@ -12,7 +12,6 @@ namespace Mudi_Models
         public Product()
         {
             TempQty = 1;
-            isInWishList = false;
         }
         [Key]
         public int Id { get; set; }
@@ -22,7 +21,7 @@ namespace Mudi_Models
 
         public string Description { get; set; }
 
-        [Range(1,int.MaxValue)]
+        [Range(1, int.MaxValue)]
         public double Price { get; set; }
 
         public string Image { get; set; }
@@ -43,12 +42,9 @@ namespace Mudi_Models
         public virtual Category Category { get; set; }
 
         [NotMapped]
-        [Display(Name = "Quantity")]
         [Range(1, 100, ErrorMessage = "Quantity must be greater than 0")]
         public int TempQty { get; set; }
 
-        [NotMapped]
-        public bool isInWishList { get; set; }
 
 
     }
