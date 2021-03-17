@@ -35,6 +35,7 @@ namespace Mudi.Controllers
 
         [BindProperty]
         public ProductUserVM ProductUserVM { get; set; }
+
         [BindProperty]
         public ContactUsVM ContactUsVM { get; set; }
         public OrderListVM OrderListVM { get; set; }
@@ -70,13 +71,18 @@ namespace Mudi.Controllers
             if (User.IsInRole(WC.CustomerRole))
             {
                 homeVM.CartList = _cartRepo.GetAll(u => u.ApplicationUserId == claim.Value);
-                homeVM.WishListItems = _wishDRepo.GetAll(u => u.ApplicationUserId == claim.Value);
 
                 List<ShoppingCart> shoppingCartList = new List<ShoppingCart>();
-                if (HttpContext.Session.Get<IEnumerable<ShoppingCart>>(WC.SessionCart) != null
-                    && HttpContext.Session.Get<IEnumerable<ShoppingCart>>(WC.SessionCart).Count() > 0)
+                
+                foreach (var item in homeVM.CartList)
                 {
-                    shoppingCartList = HttpContext.Session.Get<List<ShoppingCart>>(WC.SessionCart);
+                    var obj = shoppingCartList.FirstOrDefault(u => u.ProductId == item.ProductId);
+                    if (obj == null)
+                    {
+                        //cart item doesnot exist in session add it to session
+                        shoppingCartList.Add(new ShoppingCart { ProductId = item.ProductId, Qty = item.Qty });
+                        HttpContext.Session.Set(WC.SessionCart, shoppingCartList);
+                    }
                 }
                 return View(homeVM);
             }
@@ -108,6 +114,15 @@ namespace Mudi.Controllers
                     DetailsVM.ExistsInCart = true;
                 }
             }
+
+            //homeVM.WishListItems = _wishDRepo.GetAll(u => u.ApplicationUserId == claim.Value);
+            //foreach (var item in )
+            //{
+            //    if (item.ProductId == id)
+            //    {
+            //        DetailsVM.ExistsInCart = true;
+            //    }
+            //}
 
             return View(DetailsVM);
         }
