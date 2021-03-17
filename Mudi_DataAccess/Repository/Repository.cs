@@ -81,6 +81,11 @@ namespace Mudi_DataAccess.Repository
             dbSet.Remove(entity);
         }
 
+        public void RemoveRange(IEnumerable<T> entity)
+        {
+            dbSet.RemoveRange(entity);
+        }
+
         public void Save()
         {
             _db.SaveChanges();

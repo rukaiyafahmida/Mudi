@@ -162,6 +162,14 @@ namespace Mudi.Controllers
             }
             shoppingCartList.Add(new ShoppingCart { ProductId = id, Qty = detailsVM.Product.TempQty });
             HttpContext.Session.Set(WC.SessionCart, shoppingCartList);
+
+            if (User.IsInRole(WC.CustomerRole))
+            {
+                var claimsIdentity = (ClaimsIdentity)User.Identity;
+                var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+                _cartRepo.Add(new Cart { ProductId = id, Qty = detailsVM.Product.TempQty, ApplicationUserId =claim.Value});
+                _cartRepo.Save();
+            }
             TempData[WC.Success] = "Item add to cart successfully";
             return RedirectToAction(nameof(Index));
         }
@@ -180,7 +188,14 @@ namespace Mudi.Controllers
             {
                 shoppingCartList.Remove(itemToRemove);
             }
-
+            if (User.IsInRole(WC.CustomerRole))
+            {
+                var claimsIdentity = (ClaimsIdentity)User.Identity;
+                var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+                var obj= _cartRepo.FirstOrDefault(u=>u.ApplicationUserId == claim.Value && u.ProductId==id);
+                _cartRepo.Remove(obj);
+                _cartRepo.Save();
+            }
             HttpContext.Session.Set(WC.SessionCart, shoppingCartList);
             TempData[WC.Success] = "Item removed from cart successfully";
             return RedirectToAction(nameof(Index));

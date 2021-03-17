@@ -79,10 +79,12 @@ namespace Mudi.Controllers
             foreach (var cartObj in shoppingCartList)
             {
                 //sending to db
-                Cart cart = new Cart();
-                cart.ApplicationUserId = claim.Value;
-                cart.Qty = cartObj.Qty;
-                cart.ProductId = cartObj.ProductId;
+                Cart cart = new Cart
+                {
+                    ApplicationUserId = claim.Value,
+                    Qty = cartObj.Qty,
+                    ProductId = cartObj.ProductId
+                };
                 var obj = _cartRepo.FirstOrDefault(u => u.ApplicationUserId == claim.Value && u.ProductId == cart.ProductId);
                 if (obj == null)
                 {
@@ -196,45 +198,11 @@ namespace Mudi.Controllers
             return RedirectToAction(nameof(OrderConfirmation), new { id = orderHeader.Id });
 
 
-
-
-            //return RedirectToAction(nameof(InquiryConfirmation));
-
-            //var PathToTemplate = _webHostEnvironment.WebRootPath + Path.DirectorySeparatorChar.ToString()
-            //    + "templates" + Path.DirectorySeparatorChar.ToString() +
-            //    "Inquiry.html";
-
-            //var subject = "New Inquiry";
-            //string HtmlBody = "";
-            //using (StreamReader sr = System.IO.File.OpenText(PathToTemplate))
-            //{
-            //    HtmlBody = sr.ReadToEnd();
-            //}
-            ////Name: { 0}
-            ////Email: { 1}
-            ////Phone: { 2}
-            ////Products: {3}
-
-            //StringBuilder productListSB = new StringBuilder();
-            //foreach (var prod in ProductUserVM.ProductList)
-            //{
-            //    productListSB.Append($" - Name: { prod.Name} <span style='font-size:14px;'> (ID: {prod.Id})</span><br />");
-            //}
-
-            //string messageBody = string.Format(HtmlBody,
-            //    ProductUserVM.ApplicationUser.FullName,
-            //    ProductUserVM.ApplicationUser.Email,
-            //    ProductUserVM.ApplicationUser.PhoneNumber,
-            //    productListSB.ToString());
-
-            //await _emailSender.SendEmailAsync(WC.EmailAdmin, subject, messageBody);
-
-            //return RedirectToAction(nameof(InquiryConfirmation));
-
         }
         public IActionResult OrderConfirmation(int id)
         {
             OrderHeader orderHeader = _orderHRepo.FirstOrDefault(u => u.Id == id);
+
             HttpContext.Session.Clear();
             return View(orderHeader);
         }
