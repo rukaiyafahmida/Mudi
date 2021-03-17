@@ -58,9 +58,17 @@
                         {
                             @if (User.IsInRole(WC.CustomerRole))
                             {
-                                <li class="nav-item">
-                                    <a class="nav-link " asp-area="" asp-controller="WishList" asp-action="Index">Wish List</a>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Your Lists
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" asp-area="" asp-controller="WishList" asp-action="Index">Wish List</a>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Order" asp-action="IndexUser">Order List</a>
+
+                                    </div>
                                 </li>
+                                
                             }
                             <li class="nav-item">
                                 <a class="nav-link " asp-area="" asp-controller="Home" asp-action="ContactUs">Contact Us</a>
