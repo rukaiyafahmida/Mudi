@@ -227,6 +227,7 @@ namespace Mudi.Controllers
             var obj = _cartRepo.FirstOrDefault(u => u.ApplicationUserId == claim.Value && u.ProductId == id);
             _cartRepo.Remove(obj);
             _cartRepo.Save();
+
             HttpContext.Session.Set(WC.SessionCart, shoppingCartList);
             return RedirectToAction(nameof(Index));
         }
@@ -252,6 +253,12 @@ namespace Mudi.Controllers
         }
         public IActionResult Clear()
         {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+            IEnumerable<Cart> carts = _cartRepo.GetAll(u => u.ApplicationUserId == claim.Value);
+            _cartRepo.RemoveRange(carts);
+            _cartRepo.Save();
             HttpContext.Session.Clear();
             return RedirectToAction("Index", "Home");
         }
