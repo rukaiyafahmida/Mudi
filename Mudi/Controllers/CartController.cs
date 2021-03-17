@@ -21,7 +21,7 @@ namespace Mudi.Controllers
     [Authorize]
     public class CartController : Controller
     {
-        private readonly IWebHostEnvironment _webHostEnvironment; 
+        private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IEmailSender _emailSender;
 
         private readonly IApplicationUserRepository _userRepo;
@@ -71,7 +71,7 @@ namespace Mudi.Controllers
             }
 
             List<int> prodInCart = shoppingCartList.Select(i => i.ProductId).ToList();
-           // List<int> prodInCartSave = shoppingCartList.Select(i => i.ProductId).ToList();
+            // List<int> prodInCartSave = shoppingCartList.Select(i => i.ProductId).ToList();
 
             IEnumerable<Product> prodListTemp = _prodRepo.GetAll(u => prodInCart.Contains(u.Id));
             IList<Product> prodList = new List<Product>();
@@ -84,10 +84,16 @@ namespace Mudi.Controllers
                 cart.Qty = cartObj.Qty;
                 cart.ProductId = cartObj.ProductId;
                 var obj = _cartRepo.FirstOrDefault(u => u.ApplicationUserId == claim.Value && u.ProductId == cart.ProductId);
-                if(obj == null)
-                _cartRepo.Add(cart);
+                if (obj == null)
+                {
+                    _cartRepo.Add(cart);
+                }
+                else
+                {
 
+                }
                 //sending to cartView
+
                 Product prodTemp = prodListTemp.FirstOrDefault(u => u.Id == cartObj.ProductId);
                 prodTemp.TempQty = cartObj.Qty;
                 prodList.Add(prodTemp);
@@ -109,7 +115,7 @@ namespace Mudi.Controllers
                 shoppingCartList.Add(new ShoppingCart { ProductId = prod.Id, Qty = prod.TempQty });
             }
             HttpContext.Session.Set(WC.SessionCart, shoppingCartList);
-            
+
             return RedirectToAction(nameof(Summary));
         }
 
@@ -118,7 +124,7 @@ namespace Mudi.Controllers
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            
+
             List<ShoppingCart> shoppingCartList = new List<ShoppingCart>();
             if (HttpContext.Session.Get<IEnumerable<ShoppingCart>>(WC.SessionCart) != null
                 && HttpContext.Session.Get<IEnumerable<ShoppingCart>>(WC.SessionCart).Count() > 0)
@@ -155,42 +161,42 @@ namespace Mudi.Controllers
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-                //we need to create an order
-                
-                OrderHeader orderHeader = new OrderHeader()
+            //we need to create an order
+
+            OrderHeader orderHeader = new OrderHeader()
+            {
+                ApplicationUserId = claim.Value,
+                FinalOrderTotal = ProductUserVM.ProductList.Sum(x => x.TempQty * x.Price),
+                City = ProductUserVM.ApplicationUser.City,
+                StreetAddress = ProductUserVM.ApplicationUser.StreetAddress,
+                PostalCode = ProductUserVM.ApplicationUser.PostalCode,
+                FullName = ProductUserVM.ApplicationUser.FullName,
+                Email = ProductUserVM.ApplicationUser.Email,
+                PhoneNumber = ProductUserVM.ApplicationUser.PhoneNumber,
+                OrderDate = DateTime.Now,
+                OrderStatus = WC.StatusPending
+            };
+            _orderHRepo.Add(orderHeader);
+            _orderHRepo.Save();
+
+            foreach (var prod in ProductUserVM.ProductList)
+            {
+                OrderDetail orderDetail = new OrderDetail()
                 {
-                    ApplicationUserId = claim.Value,
-                    FinalOrderTotal = ProductUserVM.ProductList.Sum(x => x.TempQty * x.Price),
-                    City = ProductUserVM.ApplicationUser.City,
-                    StreetAddress = ProductUserVM.ApplicationUser.StreetAddress,
-                    PostalCode = ProductUserVM.ApplicationUser.PostalCode,
-                    FullName = ProductUserVM.ApplicationUser.FullName,
-                    Email = ProductUserVM.ApplicationUser.Email,
-                    PhoneNumber = ProductUserVM.ApplicationUser.PhoneNumber,
-                    OrderDate = DateTime.Now,
-                    OrderStatus = WC.StatusPending
+                    OrderHeaderId = orderHeader.Id,
+                    PricePerUnit = prod.Price,
+                    Qty = prod.TempQty,
+                    ProductId = prod.Id
                 };
-                _orderHRepo.Add(orderHeader);
-                _orderHRepo.Save();
+                _orderDRepo.Add(orderDetail);
 
-                foreach (var prod in ProductUserVM.ProductList)
-                {
-                    OrderDetail orderDetail = new OrderDetail()
-                    {
-                        OrderHeaderId = orderHeader.Id,
-                        PricePerUnit = prod.Price,
-                        Qty = prod.TempQty,
-                        ProductId = prod.Id
-                    };
-                    _orderDRepo.Add(orderDetail);
-
-                }
-                _orderDRepo.Save();
-                TempData[WC.Success] = "Order is placed successfully";
-                return RedirectToAction(nameof(OrderConfirmation), new { id = orderHeader.Id });
+            }
+            _orderDRepo.Save();
+            TempData[WC.Success] = "Order is placed successfully";
+            return RedirectToAction(nameof(OrderConfirmation), new { id = orderHeader.Id });
 
 
-            
+
 
             //return RedirectToAction(nameof(InquiryConfirmation));
 
