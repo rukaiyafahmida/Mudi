@@ -111,11 +111,17 @@ namespace Mudi.Controllers
         public IActionResult IndexPost(IEnumerable<Product> ProdList)
         {
 
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             List<ShoppingCart> shoppingCartList = new List<ShoppingCart>();
             foreach (Product prod in ProdList)
             {
                 shoppingCartList.Add(new ShoppingCart { ProductId = prod.Id, Qty = prod.TempQty });
+                var obj = _cartRepo.FirstOrDefault(u => u.ApplicationUserId == claim.Value && u.ProductId == prod.Id);
+                obj.Qty = prod.TempQty;
+                _cartRepo.Update(obj);
             }
+            _cartRepo.Save();
             HttpContext.Session.Set(WC.SessionCart, shoppingCartList);
 
             return RedirectToAction(nameof(Summary));
@@ -226,11 +232,18 @@ namespace Mudi.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult UpdateCart(IEnumerable<Product> ProdList)
         {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
             List<ShoppingCart> shoppingCartList = new List<ShoppingCart>();
             foreach (Product prod in ProdList)
             {
                 shoppingCartList.Add(new ShoppingCart { ProductId = prod.Id, Qty = prod.TempQty });
+                var obj = _cartRepo.FirstOrDefault(u => u.ApplicationUserId == claim.Value && u.ProductId == prod.Id);
+                obj.Qty = prod.TempQty;
+                _cartRepo.Update(obj);
             }
+            _cartRepo.Save();
             HttpContext.Session.Set(WC.SessionCart, shoppingCartList);
             return RedirectToAction(nameof(Index));
         }
