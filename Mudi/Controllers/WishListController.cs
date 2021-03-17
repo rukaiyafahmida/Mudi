@@ -85,8 +85,13 @@ namespace Mudi.Controllers
                 _wishDRepo.Add(obj1);
                 _wishDRepo.Save();
                 TempData[WC.Success] = "Added to WishList successfully";
-              
-            }
+
+                List<WishList> wishLists = new List<WishList>();
+                wishLists = HttpContext.Session.Get<List<WishList>>(WC.WishList);
+                wishLists.Add(new WishList { ProductId = id });
+                HttpContext.Session.Set(WC.WishList, wishLists);
+
+        }
             else
             {
                 TempData[WC.Info] = "Already In WishList";

@@ -54,12 +54,24 @@
                 <div class="card-footer bg-dark">
                     <div class="row">
                         <div class="col-12 col-md-4 ">
+                            @if (Model.ExistsWish)
+                            {
 
-                            <a class="btn btn-danger w-100 form-control btn-lg"
-                               asp-controller="WishList" asp-action="Add" asp-route-id="@Model.Product.Id">
-                                Add to Wishlist <i class="far fa-heart"></i>
-                            </a>
+                                <a class="btn btn-danger disabled w-100 form-control btn-lg"
+                                  >
+                                    Added in Wishlist <i class="fas fa-heart"></i>
+                                </a>
 
+                            }
+                            else
+                            {
+
+                                <a class="btn btn-danger w-100 form-control btn-lg"
+                                   asp-controller="WishList" asp-action="Add" asp-route-id="@Model.Product.Id">
+                                    Add to Wishlist <i class="far fa-heart"></i>
+                                </a>
+
+                            }
                         </div>
 
                         <div class="col-12 col-md-4 ">

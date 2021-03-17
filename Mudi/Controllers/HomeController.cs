@@ -71,6 +71,7 @@ namespace Mudi.Controllers
             if (User.IsInRole(WC.CustomerRole))
             {
                 homeVM.CartList = _cartRepo.GetAll(u => u.ApplicationUserId == claim.Value);
+                homeVM.WishListItems = _wishDRepo.GetAll(u => u.ApplicationUserId == claim.Value);
 
                 List<ShoppingCart> shoppingCartList = new List<ShoppingCart>();
                 
@@ -81,9 +82,24 @@ namespace Mudi.Controllers
                     {
                         //cart item doesnot exist in session add it to session
                         shoppingCartList.Add(new ShoppingCart { ProductId = item.ProductId, Qty = item.Qty });
-                        HttpContext.Session.Set(WC.SessionCart, shoppingCartList);
                     }
                 }
+                HttpContext.Session.Set(WC.SessionCart, shoppingCartList);
+
+
+                List<WishList> wishLists = new List<WishList>();
+                foreach (var item in homeVM.WishListItems)
+                {
+                    var obj = wishLists.FirstOrDefault(u => u.ProductId == item.ProductId);
+                    if (obj == null)
+                    {
+                        // Product doesnot exist in wishlist session add it to session
+                        wishLists.Add(new WishList { ProductId = item.ProductId});
+                    }
+                }
+                HttpContext.Session.Set(WC.WishList, wishLists);
+
+
                 return View(homeVM);
             }
             else
@@ -92,13 +108,20 @@ namespace Mudi.Controllers
 
         public IActionResult Details(int id)
         {
+
+            List<WishList> wishLists = new List<WishList>();
+
             List<ShoppingCart> shoppingCartList = new List<ShoppingCart>();
             if (HttpContext.Session.Get<IEnumerable<ShoppingCart>>(WC.SessionCart) != null
                 && HttpContext.Session.Get<IEnumerable<ShoppingCart>>(WC.SessionCart).Count() > 0)
             {
                 shoppingCartList = HttpContext.Session.Get<List<ShoppingCart>>(WC.SessionCart);
             }
-
+            if (HttpContext.Session.Get<IEnumerable<WishList>>(WC.WishList) != null
+                && HttpContext.Session.Get<IEnumerable<WishList>>(WC.WishList).Count() > 0)
+            {
+                wishLists = HttpContext.Session.Get<List<WishList>>(WC.WishList);
+            }
             DetailsVM DetailsVM = new DetailsVM()
             {
                 Product = _prodRepo.FirstOrDefault(u => u.Id == id, includeProperties: "Category"),
@@ -115,17 +138,18 @@ namespace Mudi.Controllers
                 }
             }
 
-            //homeVM.WishListItems = _wishDRepo.GetAll(u => u.ApplicationUserId == claim.Value);
-            //foreach (var item in )
-            //{
-            //    if (item.ProductId == id)
-            //    {
-            //        DetailsVM.ExistsInCart = true;
-            //    }
-            //}
+            foreach (var item in wishLists)
+            {
+                if (item.ProductId == id)
+                {
+                    DetailsVM.ExistsWish = true;
+                }
+            }
+
 
             return View(DetailsVM);
         }
+
         [HttpPost, ActionName("Details")]
         public IActionResult DetailsPost(int id, DetailsVM detailsVM)
         {

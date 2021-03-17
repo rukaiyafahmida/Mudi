@@ -10,6 +10,7 @@ namespace Mudi_Utility
     {
         public const string ImagePath = @"\images\product\";
         public const string SessionCart = "ShoppingCartSession";
+        public const string WishList = "WishListSession";
 
         public const string AdminRole = "Admin";
         public const string CustomerRole = "Customer";
@@ -34,6 +35,5 @@ namespace Mudi_Utility
         public const string Error = "Error";
 
         public const string Info = "Info";
-        //public static string SessionInquiryId { get; set; }
     }
 }
