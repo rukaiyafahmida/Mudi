@@ -109,6 +109,20 @@ namespace Mudi.Controllers
             }
             _wishDRepo.Remove(obj);
             _wishDRepo.Save();
+
+
+
+            List<WishList> wishLists = new List<WishList>();
+            wishLists = HttpContext.Session.Get<List<WishList>>(WC.WishList);
+
+            var itemToRemove = wishLists.SingleOrDefault(r => r.ProductId == id);
+            if (itemToRemove != null)
+            {
+                wishLists.Remove(itemToRemove);
+            }
+
+            HttpContext.Session.Set(WC.SessionCart, wishLists);
+
             TempData[WC.Success] = "Product Removed From WishList";
             return RedirectToAction("Index");
 
