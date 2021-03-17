@@ -223,7 +223,10 @@ namespace Mudi.Controllers
             }
 
             shoppingCartList.Remove(shoppingCartList.FirstOrDefault(u => u.ProductId == id));
+
             var obj = _cartRepo.FirstOrDefault(u => u.ApplicationUserId == claim.Value && u.ProductId == id);
+            _cartRepo.Remove(obj);
+            _cartRepo.Save();
             HttpContext.Session.Set(WC.SessionCart, shoppingCartList);
             return RedirectToAction(nameof(Index));
         }
