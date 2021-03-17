@@ -140,36 +140,8 @@
 
 
                             <br />
-                            @if (Model.OrderHeader.OrderStatus == Mudi_Utility.WC.StatusPending)
-                            {
-                                <input type="submit" value="Start Processing"
-                                       formmethod="post" asp-action="StartProcessing"
-                                       class="btn btn-info form-control" />
-                            }
-                            @if (Model.OrderHeader.OrderStatus == Mudi_Utility.WC.StatusInProcess)
-                            {
-                                <input type="submit" value="Ship Order"
-                                       formmethod="post" asp-action="ShipOrder"
-                                       class="btn btn-primary form-control" />
-                            }
-                            @if (Model.OrderHeader.OrderStatus == Mudi_Utility.WC.StatusShipped)
-                            {
-                                <input type="submit" value="Complete Order"
-                                       formmethod="post" asp-action="CompleteOrder"
-                                       class="btn btn-success form-control" />
-                            }
-                            @if (Model.OrderHeader.OrderStatus != Mudi_Utility.WC.StatusCompleted
-                            && Model.OrderHeader.OrderStatus != Mudi_Utility.WC.StatusCancelled)
-                            {
-                                <div class="pt-2">
-                                    <button type="submit"
-                                            class="btn btn-danger form-control"
-                                            asp-action="CancelOrder"
-                                            formmethod="post">
-                                        Cancel Order
-                                    </button>
-                                </div>
-                            }
+
+                            
                         </div>
                     </div>
                 </div>
