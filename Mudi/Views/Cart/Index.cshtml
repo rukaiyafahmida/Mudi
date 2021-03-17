@@ -34,7 +34,7 @@
                                         Price per Unit
                                     </div>
                                     <div class="col-6 col-lg-2">
-                                        Qty
+                                        Quantity
                                     </div>
                                     <div class="col-6 col-lg-2">
                                         Total Price
@@ -97,7 +97,7 @@
 
                                 <div class="col-6 col-md-3 offset-md-6">
 
-                                    <input type="submit" asp-action="UpdateCart" formmethod="post" name="Update" value="Update Cart"
+                                    <input type="submit" onclick="return validateInput()" asp-action="UpdateCart" formmethod="post" name="Update" value="Update Cart"
                                            class="btn btn-info form-control" />
 
                                 </div>
@@ -117,4 +117,25 @@
 else
 {
     <p>Please add items to cart.</p>
+}
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+
+    <!--<-->@*script>
+
+        @for (int i = 0; i < Model.Count(); i++)
+        {
+            <script>
+            function validateInput() {
+
+                if (@Model[i].TempQty <= 0) {
+                    Swal.fire('No zero or negative value allowed')
+                        return false;
+                }
+                return true;
+            }
+            </script>
+        }
+    </script>*@
 }
