@@ -29,6 +29,8 @@ namespace Mudi.Controllers
 
         private readonly IWishListDetailRepository _wishDRepo;
 
+        private readonly ICartRepository _cartRepo;
+
         private readonly IOrderHeaderRepository _orderHRepo;
         private readonly IOrderDetailRepository _orderDRepo;
 
@@ -40,7 +42,7 @@ namespace Mudi.Controllers
         public ProductVM ProductVM { get; set; }
 
         public CartController(IApplicationUserRepository userRepo, IProductRepository prodRepo,
-            IWishListDetailRepository wishDRepo,
+            IWishListDetailRepository wishDRepo, ICartRepository cartRepo,
             IOrderHeaderRepository orderHRepo, IOrderDetailRepository orderDRepo,
             IWebHostEnvironment webHostEnvironment, IEmailSender emailSender)
         {
@@ -52,10 +54,14 @@ namespace Mudi.Controllers
             _wishDRepo = wishDRepo;
             _orderDRepo = orderDRepo;
             _orderHRepo = orderHRepo;
+            _cartRepo = cartRepo;
         }
 
         public IActionResult Index()
         {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
             List<ShoppingCart> shoppingCartList = new List<ShoppingCart>();
             if (HttpContext.Session.Get<IEnumerable<ShoppingCart>>(WC.SessionCart) != null
                 && HttpContext.Session.Get<IEnumerable<ShoppingCart>>(WC.SessionCart).Count() > 0)
@@ -65,15 +71,28 @@ namespace Mudi.Controllers
             }
 
             List<int> prodInCart = shoppingCartList.Select(i => i.ProductId).ToList();
+           // List<int> prodInCartSave = shoppingCartList.Select(i => i.ProductId).ToList();
+
             IEnumerable<Product> prodListTemp = _prodRepo.GetAll(u => prodInCart.Contains(u.Id));
             IList<Product> prodList = new List<Product>();
 
             foreach (var cartObj in shoppingCartList)
             {
+                //sending to db
+                Cart cart = new Cart();
+                cart.ApplicationUserId = claim.Value;
+                cart.Qty = cartObj.Qty;
+                cart.ProductId = cartObj.ProductId;
+                var obj = _cartRepo.FirstOrDefault(u => u.ApplicationUserId == claim.Value && u.ProductId == cart.ProductId);
+                if(obj == null)
+                _cartRepo.Add(cart);
+
+                //sending to cartView
                 Product prodTemp = prodListTemp.FirstOrDefault(u => u.Id == cartObj.ProductId);
                 prodTemp.TempQty = cartObj.Qty;
                 prodList.Add(prodTemp);
             }
+            _cartRepo.Save();
 
             return View(prodList);
         }

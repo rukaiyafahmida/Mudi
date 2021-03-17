@@ -55,6 +55,7 @@ namespace Mudi
             services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
 
             services.AddScoped<IWishListDetailRepository, WishListDetailRepository>();
+            services.AddScoped<ICartRepository, CartRepository>();
 
             services.AddScoped<IOrderHeaderRepository, OrderHeaderRepository>();
             services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
