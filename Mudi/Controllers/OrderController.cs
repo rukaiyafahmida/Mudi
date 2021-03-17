@@ -6,6 +6,7 @@ using Mudi_Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Mudi.Controllers
@@ -81,34 +82,15 @@ namespace Mudi.Controllers
 
             return View(OrderVM);
         }
-        public IActionResult IndexUser(string searchName = null, string searchEmail = null, string searchPhone = null, string Status = null)
+        public IActionResult IndexUser()
         {
+
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             OrderListVM orderListVM = new OrderListVM()
             {
-                OrderHList = _orderHRepo.GetAll(),
-                StatusList = WC.listStatus.ToList().Select(i => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
-                {
-                    Text = i,
-                    Value = i
-                })
+                OrderHList = _orderHRepo.GetAll(u => u.ApplicationUserId == claim.Value)
             };
-            if (!string.IsNullOrEmpty(searchName))
-            {
-                orderListVM.OrderHList = orderListVM.OrderHList.Where(u => u.FullName.ToLower().Contains(searchName.ToLower()));
-            }
-            if (!string.IsNullOrEmpty(searchEmail))
-            {
-                orderListVM.OrderHList = orderListVM.OrderHList.Where(u => u.Email.ToLower().Contains(searchEmail.ToLower()));
-            }
-            if (!string.IsNullOrEmpty(searchPhone))
-            {
-                orderListVM.OrderHList = orderListVM.OrderHList.Where(u => u.PhoneNumber.ToLower().Contains(searchPhone.ToLower()));
-            }
-            if (!string.IsNullOrEmpty(Status) && Status != "--Order Status--")
-            {
-                orderListVM.OrderHList = orderListVM.OrderHList.Where(u => u.OrderStatus.ToLower().Contains(Status.ToLower()));
-            }
-
             return View(orderListVM);
         }
 
