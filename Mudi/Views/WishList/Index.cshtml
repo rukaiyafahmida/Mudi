@@ -41,7 +41,7 @@
                         }
                         <td class="text-center">
                             <div class="w-75 btn-group" role="group">
-                                <a asp-controller="WishList" asp-route-Id="@obj.Id" asp-action="Convert" class="btn btn-primary mx-2">
+                                <a asp-controller="Home" asp-route-Id="@obj.ProductId" asp-action="Details" class="btn btn-primary mx-2">
                                     <i class="fas fa-cart-plus"></i>
                                 </a>
                                 <a asp-controller="WishList" asp-route-Id="@obj.Id" asp-action="Delete" class="btn btn-danger mx-2">

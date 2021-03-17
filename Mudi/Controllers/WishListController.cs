@@ -47,7 +47,9 @@ namespace Mudi.Controllers
                                                                                                  wishListId= wish.Id,
                                                                                                  productName = product.Name,
                                                                                                  productPrice = product.Price,
-                                                                                                 productStock=product.Stock
+                                                                                                 productStock=product.Stock,
+                                                                                                 productId = product.Id
+                                                                         
                                                                                              });
             List<WishListVM> WishListVM = new List<WishListVM>();
 
@@ -56,6 +58,7 @@ namespace Mudi.Controllers
                 WishListVM wishList = new WishListVM()
                 {
                     Id= details.wishListId,
+                    ProductId = details.productId,
                     ProductName=details.productName,
                     UnitPrice=details.productPrice,
                     Stock=details.productStock
