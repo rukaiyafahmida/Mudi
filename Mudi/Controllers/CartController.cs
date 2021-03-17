@@ -100,8 +100,7 @@ namespace Mudi.Controllers
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            //var userId = User.FindFirstValue(ClaimTypes.Name);
-
+            
             List<ShoppingCart> shoppingCartList = new List<ShoppingCart>();
             if (HttpContext.Session.Get<IEnumerable<ShoppingCart>>(WC.SessionCart) != null
                 && HttpContext.Session.Get<IEnumerable<ShoppingCart>>(WC.SessionCart).Count() > 0)
@@ -169,8 +168,8 @@ namespace Mudi.Controllers
 
                 }
                 _orderDRepo.Save();
-                TempData[WC.Success] = "Inquiry submitted successfully";
-                return RedirectToAction(nameof(InquiryConfirmation), new { id = orderHeader.Id });
+                TempData[WC.Success] = "Order is placed successfully";
+                return RedirectToAction(nameof(OrderConfirmation), new { id = orderHeader.Id });
 
 
             
@@ -209,11 +208,11 @@ namespace Mudi.Controllers
             //return RedirectToAction(nameof(InquiryConfirmation));
 
         }
-        public IActionResult InquiryConfirmation(OrderVM orderVM)
+        public IActionResult OrderConfirmation(int id)
         {
-
+            OrderHeader orderHeader = _orderHRepo.FirstOrDefault(u => u.Id == id);
             HttpContext.Session.Clear();
-            return View();
+            return View(orderHeader);
         }
         public IActionResult Remove(int id)
         {
