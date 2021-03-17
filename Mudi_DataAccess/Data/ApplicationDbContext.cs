@@ -21,6 +21,7 @@ namespace Mudi_DataAccess
 
         public DbSet<OrderHeader> OrderHeader { get; set; }
         public DbSet<OrderDetail> OrderDetail { get; set; }
+        public DbSet<WebSiteDetail> WebSiteDetail { get; set; }
         public DbSet<Cart> Cart { get; set; }
     }
 }
