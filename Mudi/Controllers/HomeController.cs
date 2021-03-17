@@ -29,6 +29,8 @@ namespace Mudi.Controllers
         private readonly IOrderHeaderRepository _orderHRepo;
         private readonly ICategoryRepository _catRepo;
         private readonly IApplicationUserRepository _userRepo;
+        private readonly IWishListDetailRepository _wishDRepo;
+        private readonly ICartRepository _cartRepo;
 
 
         [BindProperty]
@@ -38,7 +40,9 @@ namespace Mudi.Controllers
         public OrderListVM OrderListVM { get; set; }
 
         public HomeController(ILogger<HomeController> logger, IProductRepository prodRepo,
-            ICategoryRepository catRepo, IApplicationUserRepository userRepo, IOrderHeaderRepository orderHRepo,
+            ICategoryRepository catRepo, IApplicationUserRepository userRepo,
+            IOrderHeaderRepository orderHRepo, ICartRepository cartRepo,
+            IWishListDetailRepository wishDRepo,
             IWebHostEnvironment webHostEnvironment, IEmailSender emailSender)
         {
             _logger = logger;
@@ -48,19 +52,35 @@ namespace Mudi.Controllers
             _webHostEnvironment = webHostEnvironment;
             _emailSender = emailSender;
             _orderHRepo = orderHRepo;
+            _cartRepo = cartRepo;
+            _wishDRepo = wishDRepo;
         }
 
         public IActionResult Index()
         {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             HomeVM homeVM = new HomeVM()
             {
                 Products = _prodRepo.GetAll(includeProperties: "Category"),
-                Categories = _catRepo.GetAll(),
-                OrderHList =_orderHRepo.GetAll()
-
+                Categories = _catRepo.GetAll()
             };
-            return View(homeVM);
+            if (User.IsInRole(WC.CustomerRole))
+            {
+                homeVM.CartList = _cartRepo.GetAll(u => u.ApplicationUserId == claim.Value);
+                homeVM.WishListItems = _wishDRepo.GetAll(u => u.ApplicationUserId == claim.Value);
+
+                return View(homeVM);
+            }
+            else if (User.IsInRole(WC.AdminRole))
+            {
+                homeVM.OrderHList = _orderHRepo.GetAll();
+                return View(homeVM);
+            }
+            else
+                return View(homeVM);
         }
+
         public IActionResult Details(int id)
         {
             List<ShoppingCart> shoppingCartList = new List<ShoppingCart>();
@@ -70,13 +90,11 @@ namespace Mudi.Controllers
                 shoppingCartList = HttpContext.Session.Get<List<ShoppingCart>>(WC.SessionCart);
             }
 
-
-
             DetailsVM DetailsVM = new DetailsVM()
             {
                 Product = _prodRepo.FirstOrDefault(u => u.Id == id, includeProperties: "Category"),
                 ExistsInCart = false
-                
+
             };
 
 
@@ -134,7 +152,7 @@ namespace Mudi.Controllers
         }
         public IActionResult ContactUs()
         {
-            
+
 
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
@@ -142,8 +160,8 @@ namespace Mudi.Controllers
 
             //var userId = User.FindFirstValue(ClaimTypes.Name);
             ContactUsVM = new ContactUsVM();
-            if(claim !=null)
-            ContactUsVM.ApplicationUser = _userRepo.FirstOrDefault(u => u.Id == claim.Value);
+            if (claim != null)
+                ContactUsVM.ApplicationUser = _userRepo.FirstOrDefault(u => u.Id == claim.Value);
 
             return View(ContactUsVM);
         }
@@ -169,9 +187,9 @@ namespace Mudi.Controllers
             //Message: {3}
 
             StringBuilder message = new StringBuilder();
-            
-                message.Append(ContactUsVM.Message);
-            
+
+            message.Append(ContactUsVM.Message);
+
 
             string messageBody = string.Format(HtmlBody,
                 ContactUsVM.ApplicationUser.FullName,
