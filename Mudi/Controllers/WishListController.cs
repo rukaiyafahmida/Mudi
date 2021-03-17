@@ -31,6 +31,9 @@ namespace Mudi.Controllers
             _userRepo = userRepo;
             _prodRepo = prodRepo;
         }
+
+
+        [Authorize]
         public IActionResult Index()
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
@@ -62,7 +65,6 @@ namespace Mudi.Controllers
             return View(WishListVM);  
         }
 
-       // [HttpPost]
        [Authorize]
         public IActionResult Add(int id)
         {
@@ -84,7 +86,7 @@ namespace Mudi.Controllers
             }
             else
             {
-                TempData[WC.Error] = "Already In WishList";
+                TempData[WC.Info] = "Already In WishList";
             }
             
         return RedirectToAction("Index");
