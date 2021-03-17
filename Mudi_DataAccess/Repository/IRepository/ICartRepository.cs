@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace Mudi_DataAccess.Repository.IRepository
 {
-    public interface ICartRepository : IRepository<WishListDetail>
+    public interface ICartRepository : IRepository<Cart>
     {
-        void Update(WishListDetail obj);
+        void Update(Cart obj);
 
     }
 }
