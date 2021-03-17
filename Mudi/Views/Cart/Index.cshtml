@@ -68,7 +68,8 @@
                                     </div>
 
                                     <div class="col-4 col-lg-2 pt-lg-4" style="font-size:11px;">
-                                        <input type="text" asp-for="@Model[i].TempQty" class="form-control" />
+                                        <input type="number" asp-for="@Model[i].TempQty" class="form-control" />
+                                        <span asp-validation-for="@Model[i].TempQty" class="text-danger"></span>
                                     </div>
                                     <div class="col-3 col-lg-2 pt-lg-4" style="font-size:11px;">
                                         <span style="font-size:17px;"> ৳ @(Model[i].Price* Model[i].TempQty)</span>
@@ -97,7 +98,7 @@
 
                                 <div class="col-6 col-md-3 offset-md-6">
 
-                                    <input type="submit" onclick="return validateInput()" asp-action="UpdateCart" formmethod="post" name="Update" value="Update Cart"
+                                    <input type="submit" asp-action="UpdateCart" formmethod="post" name="Update" value="Update Cart"
                                            class="btn btn-info form-control" />
 
                                 </div>
@@ -121,21 +122,4 @@ else
 
 @section Scripts{
     <partial name="_ValidationScriptsPartial" />
-
-    <!--<-->@*script>
-
-        @for (int i = 0; i < Model.Count(); i++)
-        {
-            <script>
-            function validateInput() {
-
-                if (@Model[i].TempQty <= 0) {
-                    Swal.fire('No zero or negative value allowed')
-                        return false;
-                }
-                return true;
-            }
-            </script>
-        }
-    </script>*@
 }

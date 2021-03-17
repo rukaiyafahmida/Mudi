@@ -43,6 +43,7 @@ namespace Mudi_Models
         public virtual Category Category { get; set; }
 
         [NotMapped]
+        [Display(Name = "Quantity")]
         [Range(1, 100, ErrorMessage = "Quantity must be greater than 0")]
         public int TempQty { get; set; }
 
