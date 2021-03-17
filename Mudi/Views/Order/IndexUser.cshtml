@@ -15,11 +15,10 @@
             <e-grid-columns>
                 @*
                     <e-grid-column field="FullName" headerText="Name" textAlign="Right"></e-grid-column>
-
                     <e-grid-column field="Email" headerText="Email" textAlign="Right"></e-grid-column>
                     <e-grid-column field="PhoneNumber" headerText="Phone" textAlign="Right"></e-grid-column>*@
                 <e-grid-column field="Id" headerText="ID" isPrimaryKey="true" textAlign="Right" width="100"></e-grid-column>
-                
+
                 <e-grid-column field="FinalOrderTotal" headerText="Total Price" textAlign="Right"></e-grid-column>
                 <e-grid-column field="OrderStatus" headerText="Status" textAlign="Right"></e-grid-column>
                 <e-grid-column field="OrderDate" headerText="Order Date" customFormat="@(new { type = "date", format = "MM/dd/yyyy" })" textAlign="Right"></e-grid-column>
@@ -51,7 +50,6 @@ else
     <script>
         var count = 1;
         function querycellinfo(args) {
-
             if (args.column.headerText == "Row Numer") {
                 args.cell.innerHTML = count;
                 count++;

@@ -63,18 +63,14 @@ namespace Mudi.Controllers
             HomeVM homeVM = new HomeVM()
             {
                 Products = _prodRepo.GetAll(includeProperties: "Category"),
-                Categories = _catRepo.GetAll()
-            };
+                Categories = _catRepo.GetAll(),
+                OrderHList = _orderHRepo.GetAll()
+        };
             if (User.IsInRole(WC.CustomerRole))
             {
                 homeVM.CartList = _cartRepo.GetAll(u => u.ApplicationUserId == claim.Value);
                 homeVM.WishListItems = _wishDRepo.GetAll(u => u.ApplicationUserId == claim.Value);
 
-                return View(homeVM);
-            }
-            else if (User.IsInRole(WC.AdminRole))
-            {
-                homeVM.OrderHList = _orderHRepo.GetAll();
                 return View(homeVM);
             }
             else

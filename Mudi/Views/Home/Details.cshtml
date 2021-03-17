@@ -36,14 +36,15 @@
                                     <div class="col-12">
                                         @if (Model.ExistsInCart)
                                         {
-                                            <input type="number" asp-for="@Model.Product.TempQty" disabled class="form-control" />
+                                            <input asp-for="@Model.Product.TempQty" disabled class="form-control" />
                                         }
                                         else
                                         {
-                                            <input type="number" asp-for="@Model.Product.TempQty" class="form-control" />
+                                            <input asp-for="@Model.Product.TempQty" class="form-control" />
                                         }
                                         <span asp-validation-for="@Model.Product.TempQty" class="text-danger"></span>
                                     </div>
+
 
                                 </div>
                             </div>
