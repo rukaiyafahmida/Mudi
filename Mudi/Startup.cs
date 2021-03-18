@@ -59,6 +59,7 @@ namespace Mudi
 
             services.AddScoped<IOrderHeaderRepository, OrderHeaderRepository>();
             services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
+            services.AddScoped<IWebSiteDetailRepository, WebSiteDetailRepository>();
             services.AddScoped<IDbInitializer, DbInitializer>();
 
             services.AddAuthentication().AddFacebook(Options =>

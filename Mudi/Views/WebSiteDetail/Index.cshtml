@@ -1,0 +1,61 @@
+﻿@model IEnumerable<Mudi_Models.WebSiteDetail>
+
+
+@if (Model.Count() == 1)
+{
+    <h2>About Us</h2>
+    <section class="mb-4">
+
+        <div class="row">
+            @foreach (var obj in Model)
+            {
+                <!--Form column-->
+                <div class="col-md-9 mb-md-0 mb-5">
+                    <form method="post">
+
+                        <!--Message-->
+                        <div class="row">
+                            <div class="col-md-12">
+
+                                <div class="md-form pt-2">
+
+                                    <textarea disabled type="text" id="message" name="message" rows="5" class="form-control md-textarea">@obj.AboutUs</textarea>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!--!Message-->
+                        <!--Edit Button-->
+                        <div class="container p-3 my-3">
+                            <a asp-controller="WebSiteDetail" asp-route-Id="@obj.Id" asp-action="EditAboutUs" class="btn btn-primary mx-2">
+                                <i class="fas fa-edit"> Edit</i>
+                            </a>
+                        </div>
+                        <hr />
+                        <h2>Contact Us</h2>
+                        <div class="row">
+                            <div class="col-md-12">
+
+                                <div class="md-form pt-2">
+                                    <textarea disabled type="text" id="message" name="message" rows="5" class="form-control md-textarea">@obj.ContactUs</textarea>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!--!Message-->
+                        <!--Submit Button-->
+                        <div class="container p-3 my-3">
+                            <a asp-controller="WebSiteDetail" asp-route-Id="@obj.Id" asp-action="EditContactUs" class="btn btn-primary mx-2">
+                                <i class="fas fa-edit"> Edit</i>
+                            </a>
+                        </div>
+
+                        <!--Submit Button-->
+                    </form>
+                </div>
+                <!--!Form column-->
+            }
+            </div>
+
+    </section>
+}
