@@ -237,6 +237,7 @@ namespace Mudi.Controllers
         public IActionResult UpdateCart(IEnumerable<Product> ProdList)
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
+
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
             List<ShoppingCart> shoppingCartList = new List<ShoppingCart>();
@@ -248,6 +249,7 @@ namespace Mudi.Controllers
                 _cartRepo.Update(obj);
             }
             _cartRepo.Save();
+
             HttpContext.Session.Set(WC.SessionCart, shoppingCartList);
             return RedirectToAction(nameof(Index));
         }
