@@ -69,6 +69,13 @@ namespace Mudi.Controllers
                 //session exsits
                 shoppingCartList = HttpContext.Session.Get<List<ShoppingCart>>(WC.SessionCart);
             }
+            IEnumerable<Cart> carts = _cartRepo.GetAll(u => u.ApplicationUserId == claim.Value);
+            foreach (var cartDB in carts)
+            {
+                shoppingCartList.Add(new ShoppingCart { ProductId = cartDB.ProductId, Qty = cartDB.Qty });
+            }
+            HttpContext.Session.Set(WC.SessionCart, shoppingCartList);
+
 
             List<int> prodInCart = shoppingCartList.Select(i => i.ProductId).ToList();
             // List<int> prodInCartSave = shoppingCartList.Select(i => i.ProductId).ToList();
@@ -90,17 +97,15 @@ namespace Mudi.Controllers
                 {
                     _cartRepo.Add(cart);
                 }
-                else
-                {
-
-                }
+                
                 //sending to cartView
-
                 Product prodTemp = prodListTemp.FirstOrDefault(u => u.Id == cartObj.ProductId);
                 prodTemp.TempQty = cartObj.Qty;
                 prodList.Add(prodTemp);
             }
             _cartRepo.Save();
+
+
 
             return View(prodList);
         }
