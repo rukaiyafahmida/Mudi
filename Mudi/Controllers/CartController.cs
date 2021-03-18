@@ -205,6 +205,11 @@ namespace Mudi.Controllers
         public IActionResult OrderConfirmation(int id)
         {
             OrderHeader orderHeader = _orderHRepo.FirstOrDefault(u => u.Id == id);
+            //after oder is done the cart is cleared
+
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+         
 
             HttpContext.Session.Clear();
             return View(orderHeader);
