@@ -212,6 +212,7 @@ namespace Mudi.Controllers
 
             IEnumerable<Cart> carts = _cartRepo.GetAll(u => u.ApplicationUserId == claim.Value);
             _cartRepo.RemoveRange(carts);
+            _cartRepo.Save();
 
 
             HttpContext.Session.Clear();
