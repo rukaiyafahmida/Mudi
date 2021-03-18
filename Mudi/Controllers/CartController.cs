@@ -209,7 +209,10 @@ namespace Mudi.Controllers
 
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-         
+
+            IEnumerable<Cart> carts = _cartRepo.GetAll(u => u.ApplicationUserId == claim.Value);
+            _cartRepo.RemoveRange(carts);
+
 
             HttpContext.Session.Clear();
             return View(orderHeader);
