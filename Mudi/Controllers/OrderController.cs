@@ -129,13 +129,15 @@ namespace Mudi.Controllers
             OrderHeader orderHeader = _orderHRepo.FirstOrDefault(u => u.Id == OrderVM.OrderHeader.Id);
             orderHeader.OrderStatus = WC.StatusCompleted;
             _orderHRepo.Save();
+
             TempData[WC.Success] = "Action completed successfully";
-            //foreach(OrderDetail detail in orderVM.OrderDetail)
-            //{
-            //    Product prodTemp = _prodRepo.FirstOrDefault(x => x.Id == detail.ProductId);
-            //    prodTemp.Stock -= detail.Qty;
-            //}
-            //_prodRepo.Save();
+            var det = _orderDRepo.GetAll(u => u.OrderHeaderId == OrderVM.OrderHeader.Id);
+            foreach (var detail in det)
+            {
+                Product prodTemp = _prodRepo.FirstOrDefault(x => x.Id == detail.ProductId);
+                prodTemp.Stock -= detail.Qty;
+            }
+            _prodRepo.Save();
             return RedirectToAction(nameof(Index));
         }
     }

@@ -69,10 +69,12 @@ namespace Mudi.Controllers
                 //session exsits
                 shoppingCartList = HttpContext.Session.Get<List<ShoppingCart>>(WC.SessionCart);
             }
+
             IEnumerable<Cart> carts = _cartRepo.GetAll(u => u.ApplicationUserId == claim.Value);
             foreach (var cartDB in carts)
             {
-                shoppingCartList.Add(new ShoppingCart { ProductId = cartDB.ProductId, Qty = cartDB.Qty });
+                if(!shoppingCartList.Exists(x => x.ProductId == cartDB.ProductId))
+                    shoppingCartList.Add(new ShoppingCart { ProductId = cartDB.ProductId, Qty = cartDB.Qty });
             }
             HttpContext.Session.Set(WC.SessionCart, shoppingCartList);
 

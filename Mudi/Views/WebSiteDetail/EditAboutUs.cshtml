@@ -1,7 +1,7 @@
-﻿@model Mudi_Models.WebSiteDetail
+﻿@model Mudi_Models.ViewModels.WebSiteDetailVM
 
 <form method="post">
-    <input asp-for="Id" hidden />
+    <input asp-for="WebSiteDetailId" hidden />
     <div class="border p-3 bg-white">
 
 
@@ -30,7 +30,9 @@
 
                         <div class="col">
                             <div class="container p-3 my-3">
-                                <input type="submit" class="btn btn-info w-100" value="Update" />
+                                <button type="submit" class="btn btn-success form-control ">
+                                    <span>Update</span>
+                                </button>
                             </div>
                         </div>
 

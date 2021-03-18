@@ -209,8 +209,6 @@ namespace Mudi.Controllers
         }
         public IActionResult ContactUs()
         {
-
-
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 

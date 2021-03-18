@@ -18,8 +18,7 @@ namespace Mudi.Controllers
         [BindProperty]
         public WebSiteDetailVM WebSiteDetailVM { get; set; }
 
-        public WebSiteDetailController(
-        IWebSiteDetailRepository webDRepo)
+        public WebSiteDetailController(IWebSiteDetailRepository webDRepo)
         {
             _webDRepo = webDRepo;
 
@@ -36,69 +35,59 @@ namespace Mudi.Controllers
         
 
         //GET - EDIT
-        public IActionResult EditAboutUs(int? id)
+        public IActionResult EditAboutUs(int id)
         {
-            if (id == null || id == 0)
-            {
-                return NotFound();
-            }
-            var obj = _webDRepo.Find(id.GetValueOrDefault());
-            if (obj == null)
-            {
-                return NotFound();
-            }
+            var obj = _webDRepo.FirstOrDefault(u => u.Id == id);
 
-            return View(obj);
+            WebSiteDetailVM = new WebSiteDetailVM();
+            WebSiteDetailVM.WebSiteDetailId = id;
+            WebSiteDetailVM.AboutUs = obj.AboutUs;
+            WebSiteDetailVM.ContactUs = obj.ContactUs;
+            return View(WebSiteDetailVM);
         }
 
         //POST - EDIT
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult EditAboutUs()
+        public async Task<IActionResult> EditAboutUsPost(WebSiteDetailVM WebSiteDetailVM)
         {
-            //if (ModelState.IsValid)
-            {
-                
+            var obj = _webDRepo.FirstOrDefault(u => u.Id == WebSiteDetailVM.WebSiteDetailId);
+            obj.AboutUs = WebSiteDetailVM.AboutUs;
+            _webDRepo.Update(obj);
+            _webDRepo.Save();
+            TempData[WC.Success] = "About Us Edited successfully";
+            return RedirectToAction("Index");
 
-                //_webDRepo.Update(obj);
-                _webDRepo.Save();
-                TempData[WC.Success] = " About us Edited successfully";
-                return RedirectToAction("Index");
-            }
             TempData[WC.Error] = "Error while editing category";
             //return View(obj);
 
         }
         //GET - EDIT
-        public IActionResult EditContactUs(int? id)
+        public IActionResult EditContactUs(int id)
         {
-            if (id == null || id == 0)
-            {
-                return NotFound();
-            }
+            
             var obj = _webDRepo.FirstOrDefault(u => u.Id == id);
-            if (obj == null)
-            {
-                return NotFound();
-            }
 
-            return View(obj);
+            WebSiteDetailVM = new WebSiteDetailVM();
+            WebSiteDetailVM.WebSiteDetailId = id;
+            WebSiteDetailVM.ContactUs = obj.ContactUs;
+            WebSiteDetailVM.AboutUs = obj.AboutUs;
+            return View(WebSiteDetailVM);
         }
 
         //POST - EDIT
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult EditContactUs()
+        public IActionResult EditContactUsPost()
         {
-            //if (ModelState.IsValid)
-            {
-                var obj = _webDRepo.FirstOrDefault(u => u.Id == WebSiteDetailVM.Id);
+                
+                var obj = _webDRepo.FirstOrDefault(u => u.Id == WebSiteDetailVM.WebSiteDetailId);
                 obj.ContactUs = WebSiteDetailVM.ContactUs;
                 _webDRepo.Update(obj);
                 _webDRepo.Save();
                 TempData[WC.Success] = "Contact Us Edited successfully";
                 return RedirectToAction("Index");
-            }
+            
             TempData[WC.Error] = "Error while editing category";
             //return View(obj);
 

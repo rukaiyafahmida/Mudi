@@ -8,7 +8,7 @@ namespace Mudi_Models.ViewModels
 {
     public class WebSiteDetailVM
     {
-        public int Id { get; set; }
+        public int WebSiteDetailId { get; set; }
         public string AboutUs { get; set; }
         public string ContactUs { get; set; }
     }
