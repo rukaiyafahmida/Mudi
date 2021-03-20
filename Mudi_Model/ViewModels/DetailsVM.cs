@@ -14,6 +14,7 @@ namespace Mudi_Models.ViewModels
         }
 
         public Product Product { get; set; }
+        public int Stock { get; set; }
         public bool ExistsInCart { get; set; }
         public bool ExistsWish { get; set; }
     }

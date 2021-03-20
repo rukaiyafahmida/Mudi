@@ -29,24 +29,20 @@
 
                                         <p class="text-secondary">@Html.Raw(Model.Product.Description) </p>
                                     </div>
+                                    @if (!Model.ExistsInCart && Model.Product.Stock > 1)
+                                    {
+                                        <div class="col-12">
+                                            Quantity:
+                                        </div>
+                                        <div class="col-12">
 
-                                    <div class="col-12">
-                                        Quantity:
-                                    </div>
-                                    <div class="col-12">
-                                        @if (Model.ExistsInCart)
-                                        {
-                                            <input asp-for="@Model.Product.TempQty" disabled class="form-control" />
-                                        }
-                                        else
-                                        {
                                             <input asp-for="@Model.Product.TempQty" class="form-control" />
-                                        }
-                                        <span asp-validation-for="@Model.Product.TempQty" class="text-danger"></span>
+                                            
+                                            <span asp-validation-for="@Model.Product.TempQty" class="text-danger"></span>
+                                        </div>
+                                    }
+
                                     </div>
-
-
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -87,10 +83,14 @@
                             {
                                 <a asp-action="RemoveFromCart" asp-route-id="@Model.Product.Id" class="btn btn-warning btn-square form-control btn-lg" style="height:50px;">Remove from Cart</a>
                             }
-                            else
+                            else if (Model.Product.Stock > 1)
                             {
 
                                 <button type="submit" asp-route-id="@Model.Product.Id" class="btn btn-info form-control btn-lg" style="height:50px;">Add to Cart</button>
+                            }
+                            else
+                            {
+                                <button  class="btn btn-info form-control disabled btn-lg" style="height:50px;">Out Of Stock</button>
                             }
                         </div>
                     </div>

@@ -3,58 +3,58 @@
 
 @if (User.IsInRole(Mudi_Utility.WC.AdminRole))
 {
-<div class="card-group">
-    <div class="card">
-        @*<img class="card-img-top" src="..." alt="Card image cap">*@
-        <div class="card-body">
-            <h5 class="card-title text-center">Category</h5>
-            
-            <p class="card-text text-center">@Model.Categories.Count()</p>
-            <a asp-controller="Category" asp-action="Index" class="btn w-100 btn-primary stretched-link">View Category</a>
-        </div>
-    </div>
-    <div class="card">
-        @*<img class="card-img-top" src="..." alt="Card image cap">*@
-        <div class="card-body">
-            <h5 class="card-title text-center">Product</h5>
-            
-            <p class="card-text text-center">@Model.Products.Count()</p>
-            <a asp-controller="Product" asp-action="Index" class="btn w-100 btn-primary stretched-link">View Product</a>
-        </div>
-    </div>
-    <div class="card">
-        @*<img class="card-img-top" src="..." alt="Card image cap">*@
-        <div class="card-body">
-            <h5 class="card-title text-center">Order</h5>
-            <p class="card-text text-center">@Model.OrderHList.Count(u=>u.OrderStatus!=WC.StatusCancelled && u.OrderStatus!=WC.StatusCompleted)</p>
-            <a asp-controller="Order" asp-action="Index" class="btn w-100 btn-primary stretched-link">View Order</a>
+    <div class="card-group">
+        <div class="card">
+            @*<img class="card-img-top" src="..." alt="Card image cap">*@
+            <div class="card-body">
+                <h5 class="card-title text-center">Category</h5>
 
+                <p class="card-text text-center">@Model.Categories.Count()</p>
+                <a asp-controller="Category" asp-action="Index" class="btn w-100 btn-primary stretched-link">View Category</a>
+            </div>
+        </div>
+        <div class="card">
+            @*<img class="card-img-top" src="..." alt="Card image cap">*@
+            <div class="card-body">
+                <h5 class="card-title text-center">Product</h5>
+
+                <p class="card-text text-center">@Model.Products.Count()</p>
+                <a asp-controller="Product" asp-action="Index" class="btn w-100 btn-primary stretched-link">View Product</a>
+            </div>
+        </div>
+        <div class="card">
+            @*<img class="card-img-top" src="..." alt="Card image cap">*@
+            <div class="card-body">
+                <h5 class="card-title text-center">Order</h5>
+                <p class="card-text text-center">@Model.OrderHList.Count(u => u.OrderStatus != WC.StatusCancelled && u.OrderStatus != WC.StatusCompleted)</p>
+                <a asp-controller="Order" asp-action="Index" class="btn w-100 btn-primary stretched-link">View Order</a>
+
+            </div>
         </div>
     </div>
-</div>
-                }
-                else
-                {
-                    <div class="container">
-                        <div class="text-center">
-                            <button class="btn btn-dark filter-button" data-filter="all">All</button>
-                            @foreach (var obj in Model.Categories)
-                            {
-                                <button class="btn btn-outline-secondary filter-button" data-filter="@obj.Name.Replace(' ','_')">
-                                    @obj.Name
-                                </button>
-                            }
-                        </div>
-                        <br />
-                        <div class="row">
-                            @foreach (var prod in Model.Products)
-                            {
-                                <partial name="_IndividualProductCard" model="prod" />
-                                //display all product
-                            }
-                        </div>
-                    </div>
-                }
+}
+else
+{
+    <div class="container">
+        <div class="text-center">
+            <button class="btn btn-dark filter-button" data-filter="all">All</button>
+            @foreach (var obj in Model.Categories)
+            {
+                <button class="btn btn-outline-secondary filter-button" data-filter="@obj.Name.Replace(' ','_')">
+                    @obj.Name
+                </button>
+            }
+        </div>
+        <br />
+        <div class="row">
+            @foreach (var prod in Model.Products)
+            {
+                <partial name="_IndividualProductCard" model="prod" />
+                //display all product
+            }
+        </div>
+    </div>
+}
 
 @section Scripts{
     <script>
