@@ -200,9 +200,11 @@ namespace Mudi.Controllers
                     Qty = prod.TempQty,
                     ProductId = prod.Id
                 };
+                var prodPopularity = _prodRepo.FirstOrDefault(u => u.Id == prod.Id);
+                prodPopularity.ProductPopularity++;
+                _prodRepo.Update(prodPopularity);
                 _orderDRepo.Add(orderDetail);
-
-            }
+             }
             _orderDRepo.Save();
             TempData[WC.Success] = "Order is placed successfully";
             return RedirectToAction(nameof(OrderConfirmation), new { id = orderHeader.Id });
