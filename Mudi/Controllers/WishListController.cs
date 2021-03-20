@@ -83,6 +83,9 @@ namespace Mudi.Controllers
                 obj1.ApplicationUserId = claim.Value;
                 obj1.ProductId = id;
                 _wishDRepo.Add(obj1);
+                var incProdPopular = _prodRepo.FirstOrDefault(u => u.Id == id);
+                incProdPopular.ProductPopularity++;
+                _prodRepo.Update(incProdPopular);
                 _wishDRepo.Save();
                 TempData[WC.Success] = "Added to WishList successfully";
 
@@ -107,6 +110,10 @@ namespace Mudi.Controllers
             {
                 return NotFound();
             }
+            var incProdPopular = _prodRepo.FirstOrDefault(u => u.Id == id);
+            incProdPopular.ProductPopularity--;
+            _prodRepo.Update(incProdPopular);
+
             _wishDRepo.Remove(obj);
             _wishDRepo.Save();
 
