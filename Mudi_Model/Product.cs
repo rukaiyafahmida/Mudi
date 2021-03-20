@@ -46,6 +46,7 @@ namespace Mudi_Models
         [Range(1, 100, ErrorMessage = "Quantity must be greater than 0")]
         public int TempQty { get; set; }
 
+        public int NoOfOrder { get; set; }
 
     }
 }
