@@ -50,6 +50,7 @@ namespace Mudi_Models
         public int TempQty { get; set; }
 
         public int ProductPopularity { get; set; }
+        public string isOnSale { get; set; }
 
     }
 }
