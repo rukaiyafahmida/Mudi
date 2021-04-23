@@ -20,7 +20,7 @@ namespace Mudi.Controllers
     public class ProductController : Controller
     {
 
-        private readonly IProductRepository _prodRepo; 
+        private readonly IProductRepository _prodRepo;
         private readonly IWebHostEnvironment _webHostEnvironment;
         public ProductController(IProductRepository prodRepo, IWebHostEnvironment webHostEnvironment)
         {
@@ -189,4 +189,3 @@ namespace Mudi.Controllers
 
     }
 }
-

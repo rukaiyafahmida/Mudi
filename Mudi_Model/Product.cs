@@ -24,8 +24,8 @@ namespace Mudi_Models
         [Range(1, int.MaxValue)]
         public double Price { get; set; }
 
-        [Range(1, int.MaxValue)]
-        public double SalePrice { get; set; }
+        //[Range(1, int.MaxValue)]
+        //public double SalePrice { get; set; }
 
         public string Image { get; set; }
 
@@ -50,7 +50,6 @@ namespace Mudi_Models
         public int TempQty { get; set; }
 
         public int ProductPopularity { get; set; }
-        public string isOnSale { get; set; }
 
     }
 }
