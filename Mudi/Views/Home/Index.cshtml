@@ -1,76 +1,30 @@
-﻿@model Mudi_Models.ViewModels.HomeVM
+@model Mudi_Models.ViewModels.HomeVM
 @using Mudi_Utility
-
-@if (User.IsInRole(Mudi_Utility.WC.AdminRole))
+@{ ViewData["Title"] = User.IsInRole(WC.AdminRole) ? "Admin overview" : "Shop groceries"; }
+@if (User.IsInRole(WC.AdminRole))
 {
-    <div class="card-group">
-        <div class="card">
-            @*<img class="card-img-top" src="..." alt="Card image cap">*@
-            <div class="card-body">
-                <h5 class="card-title text-center">Category</h5>
-
-                <p class="card-text text-center">@Model.Categories.Count()</p>
-                <a asp-controller="Category" asp-action="Index" class="btn w-100 btn-primary stretched-link">View Category</a>
-            </div>
-        </div>
-        <div class="card">
-            @*<img class="card-img-top" src="..." alt="Card image cap">*@
-            <div class="card-body">
-                <h5 class="card-title text-center">Product</h5>
-
-                <p class="card-text text-center">@Model.Products.Count()</p>
-                <a asp-controller="Product" asp-action="Index" class="btn w-100 btn-primary stretched-link">View Product</a>
-            </div>
-        </div>
-        <div class="card">
-            @*<img class="card-img-top" src="..." alt="Card image cap">*@
-            <div class="card-body">
-                <h5 class="card-title text-center">Order</h5>
-                <p class="card-text text-center">@Model.OrderHList.Count(u => u.OrderStatus != WC.StatusCancelled && u.OrderStatus != WC.StatusCompleted)</p>
-                <a asp-controller="Order" asp-action="Index" class="btn w-100 btn-primary stretched-link">View Order</a>
-
-            </div>
-        </div>
+    <div class="page-heading"><div><h1>Store overview</h1><p>Your catalogue, orders and store content, in one place.</p></div><a class="btn btn-primary" asp-controller="Product" asp-action="Upsert"><i class="fas fa-plus" aria-hidden="true"></i>Create product</a></div>
+    <div class="overview-ledger">
+        <div class="overview-row"><div><h2>Products</h2><p>Keep prices, images and stock up to date.</p></div><span class="ledger-count">@Model.Products.Count()</span><a class="btn btn-secondary" asp-controller="Product" asp-action="Index">Manage products <i class="fas fa-arrow-right" aria-hidden="true"></i></a></div>
+        <div class="overview-row"><div><h2>Categories</h2><p>Organise your shop into browsable shelves.</p></div><span class="ledger-count">@Model.Categories.Count()</span><a class="btn btn-secondary" asp-controller="Category" asp-action="Index">Manage categories <i class="fas fa-arrow-right" aria-hidden="true"></i></a></div>
+        <div class="overview-row"><div><h2>Open orders</h2><p>Follow each order from pending to completed.</p></div><span class="ledger-count">@Model.OrderHList.Count(u => u.OrderStatus != WC.StatusCancelled && u.OrderStatus != WC.StatusCompleted)</span><a class="btn btn-secondary" asp-controller="Order" asp-action="Index">Manage orders <i class="fas fa-arrow-right" aria-hidden="true"></i></a></div>
     </div>
+    <div class="section-heading"><h2>Recent orders</h2><a asp-controller="Order" asp-action="Index">View all orders</a></div>
+    @if (Model.OrderHList.Any()) { <partial name="_OrderTable" model="Model.OrderHList.OrderByDescending(o => o.OrderDate).Take(5)" /> }
+    else { <div class="empty-state"><i class="fas fa-receipt" aria-hidden="true"></i><h2>No orders yet</h2><p>New customer orders will appear here.</p></div> }
 }
 else
 {
-    <div class="container">
-        <div class="text-center">
-            <button class="btn btn-dark filter-button" data-filter="all">All</button>
-            @foreach (var obj in Model.Categories)
-            {
-                <button class="btn btn-outline-secondary filter-button" data-filter="@obj.Name.Replace(' ','_')">
-                    @obj.Name
-                </button>
-            }
-        </div>
-        <br />
-        <div class="row">
-            @foreach (var prod in Model.Products)
-            {
-                <partial name="_IndividualProductCard" model="prod" />
-                //display all product
-            }
-        </div>
+    <div class="catalogue-header"><div><h1>Your everyday shop.</h1><p>Browse the shelves. Find your essentials. Make your next grocery list a little easier.</p></div><div class="catalogue-search"><label for="catalogue-search">Find something on your list</label><div class="search-field"><i class="fas fa-search" aria-hidden="true"></i><input id="catalogue-search" type="search" class="form-control" placeholder="Search products…" autocomplete="off" /></div></div></div>
+    <div class="category-tabs" role="group" aria-label="Filter products by category"><button type="button" data-category-filter="all" aria-pressed="true">All products</button>@foreach (var category in Model.Categories.OrderBy(c => c.DisplayOrder)) { <button type="button" data-category-filter="@category.Id" aria-pressed="false">@category.Name</button> }</div>
+    <p id="search-feedback" class="search-feedback" role="status" hidden></p>
+    <div class="catalogue" data-catalogue>
+    @foreach (var category in Model.Categories.OrderBy(c => c.DisplayOrder))
+    {
+        var products = Model.Products.Where(p => p.CategoryId == category.Id).ToList();
+        if (products.Count == 0) { continue; }
+        <section class="shelf" aria-labelledby="shelf-title-@category.Id"><div class="shelf-heading"><h2 id="shelf-title-@category.Id">@category.Name <small data-shelf-count>@products.Count @(products.Count == 1 ? "product" : "products")</small></h2><div class="shelf-controls"><button type="button" class="icon-button" data-shelf-move="-1" aria-label="Scroll @category.Name left"><i class="fas fa-chevron-left" aria-hidden="true"></i></button><button type="button" class="icon-button" data-shelf-move="1" aria-label="Scroll @category.Name right"><i class="fas fa-chevron-right" aria-hidden="true"></i></button></div></div><div class="product-shelf">@foreach (var product in products) { <partial name="_IndividualProductCard" model="product" /> }</div></section>
+    }
     </div>
-}
-
-@section Scripts{
-    <script>
-        $(document).ready(function () {
-            $(".filter-button").click(function () {
-                var value = $(this).attr('data-filter');
-                if (value == "all") {
-                    $('.filter').show('1000');
-                }
-                else {
-                    $(".filter").not('.' + value).hide('3000');
-                    $('.filter').filter('.' + value).show('3000');
-                }
-            });
-        });
-    </script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <div id="catalogue-empty" class="empty-state" hidden="@(Model.Products.Any() ? "hidden" : null)"><i class="fas fa-search" aria-hidden="true"></i><h2>No products found</h2><p>Try another name or browse all categories.</p><button class="btn btn-secondary" type="button" id="reset-catalogue">Show all products</button></div>
 }

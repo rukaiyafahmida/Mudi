@@ -102,6 +102,7 @@ namespace Mudi.Controllers
                 
                 //sending to cartView
                 Product prodTemp = prodListTemp.FirstOrDefault(u => u.Id == cartObj.ProductId);
+                if (prodTemp == null) continue;
                 prodTemp.TempQty = cartObj.Qty;
                 prodList.Add(prodTemp);
             }
@@ -120,10 +121,13 @@ namespace Mudi.Controllers
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             List<ShoppingCart> shoppingCartList = new List<ShoppingCart>();
-            foreach (Product prod in ProdList)
+            foreach (Product prod in ProdList ?? Enumerable.Empty<Product>())
             {
                 shoppingCartList.Add(new ShoppingCart { ProductId = prod.Id, Qty = prod.TempQty });
                 var obj = _cartRepo.FirstOrDefault(u => u.ApplicationUserId == claim.Value && u.ProductId == prod.Id);
+                var product = _prodRepo.Find(prod.Id);
+                if (obj == null || product == null || prod.TempQty < 1 || prod.TempQty > 100 || prod.TempQty > product.Stock)
+                    return BadRequest("Invalid cart quantity.");
                 obj.Qty = prod.TempQty;
                 _cartRepo.Update(obj);
             }
@@ -158,6 +162,7 @@ namespace Mudi.Controllers
             foreach (var cartObj in shoppingCartList)
             {
                 Product prodTemp = _prodRepo.FirstOrDefault(u => u.Id == cartObj.ProductId);
+                if (prodTemp == null) continue;
                 prodTemp.TempQty = cartObj.Qty;
                 ProductUserVM.ProductList.Add(prodTemp);
             }
@@ -168,10 +173,31 @@ namespace Mudi.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ActionName("Summary")]
-        public async Task<IActionResult> SummaryPost(ProductUserVM ProductUserVM)
+        public IActionResult SummaryPost(ProductUserVM ProductUserVM)
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+            var cartItems = _cartRepo.GetAll(u => u.ApplicationUserId == claim.Value).ToList();
+            if (cartItems.Count == 0) return RedirectToAction(nameof(Index));
+            var products = new List<Product>();
+            foreach (var cart in cartItems)
+            {
+                var product = _prodRepo.Find(cart.ProductId);
+                if (product == null || cart.Qty < 1 || cart.Qty > 100 || cart.Qty > product.Stock)
+                    return BadRequest("Your cart contains unavailable items or quantities.");
+                product.TempQty = cart.Qty;
+                products.Add(product);
+            }
+            // Read prices and quantities from the saved cart rather than hidden form inputs.
+            ProductUserVM.ProductList = products;
+            var customer = ProductUserVM.ApplicationUser;
+            if (customer == null || new[] { customer.FullName, customer.PhoneNumber,
+                customer.StreetAddress, customer.City, customer.PostalCode }.Any(string.IsNullOrWhiteSpace))
+            {
+                ModelState.AddModelError("", "Please complete the delivery details.");
+                return View("Summary", ProductUserVM);
+            }
 
             //we need to create an order
 
@@ -189,13 +215,12 @@ namespace Mudi.Controllers
                 OrderStatus = WC.StatusPending
             };
             _orderHRepo.Add(orderHeader);
-            _orderHRepo.Save();
 
             foreach (var prod in ProductUserVM.ProductList)
             {
                 OrderDetail orderDetail = new OrderDetail()
                 {
-                    OrderHeaderId = orderHeader.Id,
+                    OrderHeader = orderHeader,
                     PricePerUnit = prod.Price,
                     Qty = prod.TempQty,
                     ProductId = prod.Id
@@ -213,7 +238,9 @@ namespace Mudi.Controllers
         }
         public IActionResult OrderConfirmation(int id)
         {
-            OrderHeader orderHeader = _orderHRepo.FirstOrDefault(u => u.Id == id);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            OrderHeader orderHeader = _orderHRepo.FirstOrDefault(u => u.Id == id && u.ApplicationUserId == userId);
+            if (orderHeader == null) return NotFound();
             //after oder is done the cart is cleared
 
             var claimsIdentity = (ClaimsIdentity)User.Identity;
@@ -243,7 +270,7 @@ namespace Mudi.Controllers
             shoppingCartList.Remove(shoppingCartList.FirstOrDefault(u => u.ProductId == id));
 
             var obj = _cartRepo.FirstOrDefault(u => u.ApplicationUserId == claim.Value && u.ProductId == id);
-            _cartRepo.Remove(obj);
+            if (obj != null) _cartRepo.Remove(obj);
             _cartRepo.Save();
 
             HttpContext.Session.Set(WC.SessionCart, shoppingCartList);
@@ -259,10 +286,13 @@ namespace Mudi.Controllers
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
             List<ShoppingCart> shoppingCartList = new List<ShoppingCart>();
-            foreach (Product prod in ProdList)
+            foreach (Product prod in ProdList ?? Enumerable.Empty<Product>())
             {
                 shoppingCartList.Add(new ShoppingCart { ProductId = prod.Id, Qty = prod.TempQty });
                 var obj = _cartRepo.FirstOrDefault(u => u.ApplicationUserId == claim.Value && u.ProductId == prod.Id);
+                var product = _prodRepo.Find(prod.Id);
+                if (obj == null || product == null || prod.TempQty < 1 || prod.TempQty > 100 || prod.TempQty > product.Stock)
+                    return BadRequest("Invalid cart quantity.");
                 obj.Qty = prod.TempQty;
                 _cartRepo.Update(obj);
             }

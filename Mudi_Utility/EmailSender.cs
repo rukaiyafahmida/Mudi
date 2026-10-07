@@ -1,11 +1,13 @@
-﻿using Mailjet.Client;
-using Mailjet.Client.Resources;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json.Linq;
+using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.IO;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
+using System.Text;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
 namespace Mudi_Utility
@@ -13,61 +15,49 @@ namespace Mudi_Utility
     public class EmailSender : IEmailSender
     {
         private readonly IConfiguration _configuration;
+        private readonly IHostEnvironment _environment;
+        private readonly HttpClient _client;
 
-        public MailJetSettings _mailJetSettings { get; set; }
-
-        public EmailSender(IConfiguration configuration)
+        public EmailSender(IConfiguration configuration, IHostEnvironment environment, HttpClient client)
         {
             _configuration = configuration;
+            _environment = environment;
+            _client = client;
         }
-        public Task SendEmailAsync(string email, string subject, string htmlMessage)
-        {
-            return Execute(email, subject, htmlMessage);
-        }
-        public async Task Execute(string email, string subject, string body)
-        {
-            _mailJetSettings = _configuration.GetSection("MailJet").Get<MailJetSettings>();
 
-            MailjetClient client = new MailjetClient(_mailJetSettings.ApiKey, _mailJetSettings.SecretKey)
+        public async Task SendEmailAsync(string email, string subject, string htmlMessage)
+        {
+            if (_configuration["Email:Delivery"] == "File")
             {
-                Version = ApiVersion.V3_1,
-            };
-            MailjetRequest request = new MailjetRequest
-            {
-                Resource = Send.Resource,
+                if (!_environment.IsDevelopment())
+                    throw new InvalidOperationException("File email delivery is only available in Development.");
+                var directory = Path.Combine(_environment.ContentRootPath,
+                    _configuration["Email:PickupDirectory"] ?? "App_Data/mail");
+                Directory.CreateDirectory(directory);
+                var header = $"<p>To: {HtmlEncoder.Default.Encode(email ?? "")}<br>Subject: {HtmlEncoder.Default.Encode(subject ?? "")}</p><hr>";
+                await File.WriteAllTextAsync(Path.Combine(directory, $"{DateTime.UtcNow:yyyyMMddHHmmssfff}-{Guid.NewGuid():N}.html"), header + htmlMessage);
+                return;
             }
-             .Property(Send.Messages, new JArray {
-     new JObject {
-      {
-       "From",
-       new JObject {
-        {"Email", "170204001@aust.edu"},
-        {"Name", "Tanim"}
-       }
-      }, {
-       "To",
-       new JArray {
-        new JObject {
-         {
-          "Email",
-          email
-         }, {
-          "Name",
-          "Mudi"
-         }
-        }
-       }
-      }, {
-       "Subject",
-       subject
-      }, {
-       "HTMLPart",
-        body
-      }
-     }
-             });
-            await client.PostAsync(request);
 
+            var apiKey = _configuration["MailJet:ApiKey"];
+            var secret = _configuration["MailJet:SecretKey"];
+            var from = _configuration["Email:FromEmail"];
+            if (string.IsNullOrWhiteSpace(apiKey) || string.IsNullOrWhiteSpace(secret) || string.IsNullOrWhiteSpace(from))
+                throw new InvalidOperationException("Configure MailJet keys and Email:FromEmail, or use file delivery in Development.");
+            using var request = new HttpRequestMessage(HttpMethod.Post, "https://api.mailjet.com/v3.1/send");
+            request.Headers.Authorization = new AuthenticationHeaderValue("Basic",
+                Convert.ToBase64String(Encoding.UTF8.GetBytes($"{apiKey}:{secret}")));
+            request.Content = JsonContent.Create(new
+            {
+                Messages = new[] { new {
+                    From = new { Email = from, Name = _configuration["Email:FromName"] ?? "Mudi" },
+                    To = new[] { new { Email = email } },
+                    Subject = subject,
+                    HTMLPart = htmlMessage
+                } }
+            });
+            using var response = await _client.SendAsync(request);
+            response.EnsureSuccessStatusCode();
         }
     }
 }

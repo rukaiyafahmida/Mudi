@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model EmailModel
 @{
     ViewData["Title"] = "Manage Email";
@@ -18,7 +18,7 @@
                     <div class="input-group">
                         <input asp-for="Email" class="form-control" disabled />
                         <div class="input-group-append">
-                            <span class="input-group-text text-success font-weight-bold">✓</span>
+                            <span class="input-group-text text-success" role="img" aria-label="Email confirmed"><i class="fas fa-check" aria-hidden="true"></i></span>
                         </div>
                     </div>
                 }

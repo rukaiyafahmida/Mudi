@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Mudi_DataAccess.Repository.IRepository;
 using Mudi_Models;
 using Mudi_Models.ViewModels;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace Mudi.Controllers
 {
+    [Authorize]
     public class OrderController : Controller
     {
         private readonly IOrderHeaderRepository _orderHRepo;
@@ -32,6 +34,7 @@ namespace Mudi.Controllers
         }
 
 
+        [Authorize(Roles = WC.AdminRole)]
         public IActionResult Index(string searchName = null, string searchEmail = null, string searchPhone = null, string Status = null)
         {
             OrderListVM orderListVM = new OrderListVM()
@@ -62,6 +65,7 @@ namespace Mudi.Controllers
 
             return View(orderListVM);
         }
+        [Authorize(Roles = WC.AdminRole)]
         public IActionResult Details(int id)
         {
             OrderVM = new OrderVM()
@@ -70,16 +74,18 @@ namespace Mudi.Controllers
                 OrderDetail = _orderDRepo.GetAll(o => o.OrderHeaderId == id, includeProperties: "Product")
             };
 
+            if (OrderVM.OrderHeader == null) return NotFound();
             return View(OrderVM);
         }
         public IActionResult DetailsUser(int id)
         {
             OrderVM = new OrderVM()
             {
-                OrderHeader = _orderHRepo.FirstOrDefault(u => u.Id == id),
+                OrderHeader = _orderHRepo.FirstOrDefault(u => u.Id == id && u.ApplicationUserId == User.FindFirstValue(ClaimTypes.NameIdentifier)),
                 OrderDetail = _orderDRepo.GetAll(o => o.OrderHeaderId == id, includeProperties: "Product")
             };
 
+            if (OrderVM.OrderHeader == null) return NotFound();
             return View(OrderVM);
         }
         public IActionResult IndexUser()
@@ -95,9 +101,14 @@ namespace Mudi.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = WC.AdminRole)]
         public IActionResult StartProcessing()
         {
             OrderHeader orderHeader = _orderHRepo.FirstOrDefault(u => u.Id == OrderVM.OrderHeader.Id);
+            if (orderHeader == null) return NotFound();
+            if (orderHeader.OrderStatus != WC.StatusPending)
+                return BadRequest("Only pending orders can start processing.");
             orderHeader.OrderStatus = WC.StatusInProcess;
             _orderHRepo.Save();
             TempData[WC.Success] = "Action completed successfully";
@@ -105,9 +116,14 @@ namespace Mudi.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = WC.AdminRole)]
         public IActionResult ShipOrder()
         {
             OrderHeader orderHeader = _orderHRepo.FirstOrDefault(u => u.Id == OrderVM.OrderHeader.Id);
+            if (orderHeader == null) return NotFound();
+            if (orderHeader.OrderStatus != WC.StatusInProcess)
+                return BadRequest("Only processing orders can be shipped.");
             orderHeader.OrderStatus = WC.StatusShipped;
             orderHeader.ShippingDate = DateTime.Now;
             _orderHRepo.Save();
@@ -115,24 +131,39 @@ namespace Mudi.Controllers
             return RedirectToAction(nameof(Index));
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = WC.AdminRole)]
         public IActionResult CancelOrder()
         {
             OrderHeader orderHeader = _orderHRepo.FirstOrDefault(u => u.Id == OrderVM.OrderHeader.Id);
+            if (orderHeader == null) return NotFound();
+            if (orderHeader.OrderStatus == WC.StatusCompleted || orderHeader.OrderStatus == WC.StatusCancelled)
+                return BadRequest("This order cannot be cancelled.");
             orderHeader.OrderStatus = WC.StatusCancelled;
             _orderHRepo.Save();
             TempData[WC.Success] = "Action completed successfully";
             return RedirectToAction(nameof(Index));
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = WC.AdminRole)]
         public IActionResult CompleteOrder(OrderVM orderVM)
         {
             OrderHeader orderHeader = _orderHRepo.FirstOrDefault(u => u.Id == OrderVM.OrderHeader.Id);
+            if (orderHeader == null) return NotFound();
+            if (orderHeader.OrderStatus != WC.StatusShipped)
+                return BadRequest("Only shipped orders can be completed.");
+            var details = _orderDRepo.GetAll(u => u.OrderHeaderId == orderHeader.Id).ToList();
+            foreach (var detail in details)
+            {
+                var product = _prodRepo.Find(detail.ProductId);
+                if (product == null || product.Stock < detail.Qty)
+                    return BadRequest("Insufficient stock to complete this order.");
+            }
             orderHeader.OrderStatus = WC.StatusCompleted;
-            _orderHRepo.Save();
 
             TempData[WC.Success] = "Action completed successfully";
-            var det = _orderDRepo.GetAll(u => u.OrderHeaderId == OrderVM.OrderHeader.Id);
-            foreach (var detail in det)
+            foreach (var detail in details)
             {
                 Product prodTemp = _prodRepo.FirstOrDefault(x => x.Id == detail.ProductId);
                 prodTemp.Stock -= detail.Qty;

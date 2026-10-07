@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Mudi_DataAccess.Repository.IRepository;
 using System;
 using Mudi_Models;
@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Mudi.Controllers
 {
+    [Authorize]
     public class WishListController : Controller
     {
 
@@ -73,6 +74,7 @@ namespace Mudi.Controllers
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
             
+            if (_prodRepo.Find(id) == null) return NotFound();
             WishListDetail obj = new WishListDetail();
             obj=_wishDRepo.FirstOrDefault(u => u.ApplicationUserId == claim.Value && u.ProductId == id);
             if(obj == null) //product is not in wishlist of the user
@@ -88,7 +90,7 @@ namespace Mudi.Controllers
                 TempData[WC.Success] = "Added to WishList successfully";
 
                 List<WishList> wishLists = new List<WishList>();
-                wishLists = HttpContext.Session.Get<List<WishList>>(WC.WishList);
+                wishLists = HttpContext.Session.Get<List<WishList>>(WC.WishList) ?? new List<WishList>();
                 wishLists.Add(new WishList { ProductId = id });
                 HttpContext.Session.Set(WC.WishList, wishLists);
 
@@ -103,13 +105,14 @@ namespace Mudi.Controllers
         
         public IActionResult Delete(int? id)
         {
-            var obj = _wishDRepo.Find(id.GetValueOrDefault());
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var obj = _wishDRepo.FirstOrDefault(u => u.Id == id.GetValueOrDefault() && u.ApplicationUserId == userId);
             if (obj == null)
             {
                 return NotFound();
             }
-            var incProdPopular = _prodRepo.FirstOrDefault(u => u.Id == id);
-            incProdPopular.ProductPopularity--;
+            var incProdPopular = _prodRepo.FirstOrDefault(u => u.Id == obj.ProductId);
+            incProdPopular.ProductPopularity = Math.Max(0, incProdPopular.ProductPopularity - 1);
             _prodRepo.Update(incProdPopular);
 
             _wishDRepo.Remove(obj);
@@ -118,15 +121,15 @@ namespace Mudi.Controllers
 
 
             List<WishList> wishLists = new List<WishList>();
-            wishLists = HttpContext.Session.Get<List<WishList>>(WC.WishList);
+            wishLists = HttpContext.Session.Get<List<WishList>>(WC.WishList) ?? new List<WishList>();
 
-            var itemToRemove = wishLists.SingleOrDefault(r => r.ProductId == id);
+            var itemToRemove = wishLists.SingleOrDefault(r => r.ProductId == obj.ProductId);
             if (itemToRemove != null)
             {
                 wishLists.Remove(itemToRemove);
             }
 
-            HttpContext.Session.Set(WC.SessionCart, wishLists);
+            HttpContext.Session.Set(WC.WishList, wishLists);
 
             TempData[WC.Success] = "Product Removed From WishList";
             return RedirectToAction("Index");

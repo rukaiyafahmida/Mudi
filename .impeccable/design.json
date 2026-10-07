@@ -1,0 +1,493 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-07T20:46:02.182417Z",
+  "title": "Design System: Mudi",
+  "extensions": {
+    "colorMeta": {
+      "dark-ground": {
+        "role": "neutral",
+        "displayName": "Dark Ground",
+        "tonalRamp": [
+          "oklch(15.00% 0.01168 260.61)",
+          "oklch(26.43% 0.01168 260.61)",
+          "oklch(37.86% 0.01168 260.61)",
+          "oklch(49.29% 0.01168 260.61)",
+          "oklch(60.71% 0.01168 260.61)",
+          "oklch(72.14% 0.01168 260.61)",
+          "oklch(83.57% 0.01168 260.61)",
+          "oklch(95.00% 0.01168 260.61)"
+        ]
+      },
+      "dark-surface": {
+        "role": "neutral",
+        "displayName": "Dark Surface",
+        "tonalRamp": [
+          "oklch(15.00% 0.01701 264.12)",
+          "oklch(26.43% 0.01701 264.12)",
+          "oklch(37.86% 0.01701 264.12)",
+          "oklch(49.29% 0.01701 264.12)",
+          "oklch(60.71% 0.01701 264.12)",
+          "oklch(72.14% 0.01701 264.12)",
+          "oklch(83.57% 0.01701 264.12)",
+          "oklch(95.00% 0.01701 264.12)"
+        ]
+      },
+      "dark-raised": {
+        "role": "neutral",
+        "displayName": "Dark Raised",
+        "tonalRamp": [
+          "oklch(15.00% 0.02245 262.45)",
+          "oklch(26.43% 0.02245 262.45)",
+          "oklch(37.86% 0.02245 262.45)",
+          "oklch(49.29% 0.02245 262.45)",
+          "oklch(60.71% 0.02245 262.45)",
+          "oklch(72.14% 0.02245 262.45)",
+          "oklch(83.57% 0.02245 262.45)",
+          "oklch(95.00% 0.02245 262.45)"
+        ]
+      },
+      "dark-line": {
+        "role": "neutral",
+        "displayName": "Dark Line",
+        "tonalRamp": [
+          "oklch(15.00% 0.02132 259.39)",
+          "oklch(26.43% 0.02132 259.39)",
+          "oklch(37.86% 0.02132 259.39)",
+          "oklch(49.29% 0.02132 259.39)",
+          "oklch(60.71% 0.02132 259.39)",
+          "oklch(72.14% 0.02132 259.39)",
+          "oklch(83.57% 0.02132 259.39)",
+          "oklch(95.00% 0.02132 259.39)"
+        ]
+      },
+      "dark-ink": {
+        "role": "neutral",
+        "displayName": "Dark Ink",
+        "tonalRamp": [
+          "oklch(15.00% 0.00267 286.35)",
+          "oklch(26.43% 0.00267 286.35)",
+          "oklch(37.86% 0.00267 286.35)",
+          "oklch(49.29% 0.00267 286.35)",
+          "oklch(60.71% 0.00267 286.35)",
+          "oklch(72.14% 0.00267 286.35)",
+          "oklch(83.57% 0.00267 286.35)",
+          "oklch(95.00% 0.00267 286.35)"
+        ]
+      },
+      "dark-muted": {
+        "role": "neutral",
+        "displayName": "Dark Muted",
+        "tonalRamp": [
+          "oklch(15.00% 0.01937 258.36)",
+          "oklch(26.43% 0.01937 258.36)",
+          "oklch(37.86% 0.01937 258.36)",
+          "oklch(49.29% 0.01937 258.36)",
+          "oklch(60.71% 0.01937 258.36)",
+          "oklch(72.14% 0.01937 258.36)",
+          "oklch(83.57% 0.01937 258.36)",
+          "oklch(95.00% 0.01937 258.36)"
+        ]
+      },
+      "dark-accent": {
+        "role": "primary",
+        "displayName": "Dark Amber",
+        "tonalRamp": [
+          "oklch(15.00% 0.13334 81.75)",
+          "oklch(26.43% 0.13334 81.75)",
+          "oklch(37.86% 0.13334 81.75)",
+          "oklch(49.29% 0.13334 81.75)",
+          "oklch(60.71% 0.13334 81.75)",
+          "oklch(72.14% 0.13334 81.75)",
+          "oklch(83.57% 0.13334 81.75)",
+          "oklch(95.00% 0.13334 81.75)"
+        ]
+      },
+      "dark-danger": {
+        "role": "tertiary",
+        "displayName": "Dark Cranberry",
+        "tonalRamp": [
+          "oklch(15.00% 0.11073 15.64)",
+          "oklch(26.43% 0.11073 15.64)",
+          "oklch(37.86% 0.11073 15.64)",
+          "oklch(49.29% 0.11073 15.64)",
+          "oklch(60.71% 0.11073 15.64)",
+          "oklch(72.14% 0.11073 15.64)",
+          "oklch(83.57% 0.11073 15.64)",
+          "oklch(95.00% 0.11073 15.64)"
+        ]
+      },
+      "dark-success": {
+        "role": "secondary",
+        "displayName": "Dark Sage",
+        "tonalRamp": [
+          "oklch(15.00% 0.05949 159.45)",
+          "oklch(26.43% 0.05949 159.45)",
+          "oklch(37.86% 0.05949 159.45)",
+          "oklch(49.29% 0.05949 159.45)",
+          "oklch(60.71% 0.05949 159.45)",
+          "oklch(72.14% 0.05949 159.45)",
+          "oklch(83.57% 0.05949 159.45)",
+          "oklch(95.00% 0.05949 159.45)"
+        ]
+      },
+      "dark-accent-hover": {
+        "role": "primary",
+        "displayName": "Dark Amber Hover",
+        "tonalRamp": [
+          "oklch(15.00% 0.10054 84.58)",
+          "oklch(26.43% 0.10054 84.58)",
+          "oklch(37.86% 0.10054 84.58)",
+          "oklch(49.29% 0.10054 84.58)",
+          "oklch(60.71% 0.10054 84.58)",
+          "oklch(72.14% 0.10054 84.58)",
+          "oklch(83.57% 0.10054 84.58)",
+          "oklch(95.00% 0.10054 84.58)"
+        ]
+      },
+      "light-ground": {
+        "role": "neutral",
+        "displayName": "Light Ground",
+        "tonalRamp": [
+          "oklch(15.00% 0.00697 88.64)",
+          "oklch(26.43% 0.00697 88.64)",
+          "oklch(37.86% 0.00697 88.64)",
+          "oklch(49.29% 0.00697 88.64)",
+          "oklch(60.71% 0.00697 88.64)",
+          "oklch(72.14% 0.00697 88.64)",
+          "oklch(83.57% 0.00697 88.64)",
+          "oklch(95.00% 0.00697 88.64)"
+        ]
+      },
+      "light-surface": {
+        "role": "neutral",
+        "displayName": "Light Surface",
+        "tonalRamp": [
+          "oklch(15.00% 0.00537 95.10)",
+          "oklch(26.43% 0.00537 95.10)",
+          "oklch(37.86% 0.00537 95.10)",
+          "oklch(49.29% 0.00537 95.10)",
+          "oklch(60.71% 0.00537 95.10)",
+          "oklch(72.14% 0.00537 95.10)",
+          "oklch(83.57% 0.00537 95.10)",
+          "oklch(95.00% 0.00537 95.10)"
+        ]
+      },
+      "light-raised": {
+        "role": "neutral",
+        "displayName": "Light Raised",
+        "tonalRamp": [
+          "oklch(15.00% 0.00990 87.47)",
+          "oklch(26.43% 0.00990 87.47)",
+          "oklch(37.86% 0.00990 87.47)",
+          "oklch(49.29% 0.00990 87.47)",
+          "oklch(60.71% 0.00990 87.47)",
+          "oklch(72.14% 0.00990 87.47)",
+          "oklch(83.57% 0.00990 87.47)",
+          "oklch(95.00% 0.00990 87.47)"
+        ]
+      },
+      "light-line": {
+        "role": "neutral",
+        "displayName": "Light Line",
+        "tonalRamp": [
+          "oklch(15.00% 0.01176 84.58)",
+          "oklch(26.43% 0.01176 84.58)",
+          "oklch(37.86% 0.01176 84.58)",
+          "oklch(49.29% 0.01176 84.58)",
+          "oklch(60.71% 0.01176 84.58)",
+          "oklch(72.14% 0.01176 84.58)",
+          "oklch(83.57% 0.01176 84.58)",
+          "oklch(95.00% 0.01176 84.58)"
+        ]
+      },
+      "light-ink": {
+        "role": "neutral",
+        "displayName": "Light Ink",
+        "tonalRamp": [
+          "oklch(15.00% 0.01424 261.68)",
+          "oklch(26.43% 0.01424 261.68)",
+          "oklch(37.86% 0.01424 261.68)",
+          "oklch(49.29% 0.01424 261.68)",
+          "oklch(60.71% 0.01424 261.68)",
+          "oklch(72.14% 0.01424 261.68)",
+          "oklch(83.57% 0.01424 261.68)",
+          "oklch(95.00% 0.01424 261.68)"
+        ]
+      },
+      "light-muted": {
+        "role": "neutral",
+        "displayName": "Light Muted",
+        "tonalRamp": [
+          "oklch(15.00% 0.01942 259.42)",
+          "oklch(26.43% 0.01942 259.42)",
+          "oklch(37.86% 0.01942 259.42)",
+          "oklch(49.29% 0.01942 259.42)",
+          "oklch(60.71% 0.01942 259.42)",
+          "oklch(72.14% 0.01942 259.42)",
+          "oklch(83.57% 0.01942 259.42)",
+          "oklch(95.00% 0.01942 259.42)"
+        ]
+      },
+      "light-accent": {
+        "role": "primary",
+        "displayName": "Light Amber",
+        "tonalRamp": [
+          "oklch(15.00% 0.11448 65.12)",
+          "oklch(26.43% 0.11448 65.12)",
+          "oklch(37.86% 0.11448 65.12)",
+          "oklch(49.29% 0.11448 65.12)",
+          "oklch(60.71% 0.11448 65.12)",
+          "oklch(72.14% 0.11448 65.12)",
+          "oklch(83.57% 0.11448 65.12)",
+          "oklch(95.00% 0.11448 65.12)"
+        ]
+      },
+      "light-danger": {
+        "role": "tertiary",
+        "displayName": "Light Cranberry",
+        "tonalRamp": [
+          "oklch(15.00% 0.17079 19.14)",
+          "oklch(26.43% 0.17079 19.14)",
+          "oklch(37.86% 0.17079 19.14)",
+          "oklch(49.29% 0.17079 19.14)",
+          "oklch(60.71% 0.17079 19.14)",
+          "oklch(72.14% 0.17079 19.14)",
+          "oklch(83.57% 0.17079 19.14)",
+          "oklch(95.00% 0.17079 19.14)"
+        ]
+      },
+      "light-success": {
+        "role": "secondary",
+        "displayName": "Light Sage",
+        "tonalRamp": [
+          "oklch(15.00% 0.09659 156.84)",
+          "oklch(26.43% 0.09659 156.84)",
+          "oklch(37.86% 0.09659 156.84)",
+          "oklch(49.29% 0.09659 156.84)",
+          "oklch(60.71% 0.09659 156.84)",
+          "oklch(72.14% 0.09659 156.84)",
+          "oklch(83.57% 0.09659 156.84)",
+          "oklch(95.00% 0.09659 156.84)"
+        ]
+      },
+      "light-accent-hover": {
+        "role": "primary",
+        "displayName": "Light Amber Hover",
+        "tonalRamp": [
+          "oklch(15.00% 0.09718 66.28)",
+          "oklch(26.43% 0.09718 66.28)",
+          "oklch(37.86% 0.09718 66.28)",
+          "oklch(49.29% 0.09718 66.28)",
+          "oklch(60.71% 0.09718 66.28)",
+          "oklch(72.14% 0.09718 66.28)",
+          "oklch(83.57% 0.09718 66.28)",
+          "oklch(95.00% 0.09718 66.28)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Page display",
+        "purpose": "General page headings in self-hosted Bebas Neue."
+      },
+      "headline": {
+        "displayName": "Section headline",
+        "purpose": "Condensed section headings."
+      },
+      "title": {
+        "displayName": "Working title",
+        "purpose": "Inter subheadings in forms and records."
+      },
+      "product-title": {
+        "displayName": "Product name",
+        "purpose": "Readable catalogue names outside image disclosure."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Prose, inputs and everyday reading."
+      },
+      "label": {
+        "displayName": "Visible label",
+        "purpose": "Persistent form labels."
+      },
+      "action": {
+        "displayName": "Action",
+        "purpose": "Readable compact button labels."
+      }
+    },
+    "shadows": [
+      {
+        "name": "artwork-dark-engaged",
+        "value": "0 8px 24px #0006",
+        "purpose": "Engaged dark-theme product artwork only."
+      },
+      {
+        "name": "artwork-light-engaged",
+        "value": "0 8px 24px #23272e15",
+        "purpose": "Engaged light-theme product artwork only."
+      }
+    ],
+    "motion": [
+      {
+        "name": "control-color-transition",
+        "value": ".16s ease-out",
+        "purpose": "Background, border and text state changes."
+      },
+      {
+        "name": "artwork-border-transition",
+        "value": ".23s cubic-bezier(.16,1,.3,1)",
+        "purpose": "Artwork border and shadow engagement."
+      },
+      {
+        "name": "disclosure-drawer-transition",
+        "value": ".25s cubic-bezier(.16,1,.3,1)",
+        "purpose": "Supporting-copy reveal and mobile drawer movement."
+      },
+      {
+        "name": "artwork-opacity-transition",
+        "value": ".2s ease-out",
+        "purpose": "Neighbour artwork attenuation; text remains opaque."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "none",
+        "purpose": "Remove transitions/animations and smooth scrolling while preserving state for prefers-reduced-motion: reduce."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "very-large-min",
+        "value": "1800px"
+      },
+      {
+        "name": "compact-desktop-max",
+        "value": "1200px"
+      },
+      {
+        "name": "drawer-max",
+        "value": "900px"
+      },
+      {
+        "name": "stacked-records-max",
+        "value": "640px"
+      },
+      {
+        "name": "narrow-phone-max",
+        "value": "360px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary action",
+      "kind": "button",
+      "description": "Accent fill with theme-aware text, hover and keyboard focus.",
+      "html": "<button class=\"ds-primary\" type=\"button\">Add to cart</button>",
+      "css": ".ds-primary{font-family:Inter,sans-serif;font-size:13px;font-weight:600;line-height:1.5;display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:44px;padding:10px 18px;border:1px solid;border-radius:5px;text-decoration:none;transition:background-color .16s ease-out,border-color .16s ease-out,color .16s ease-out;background:var(--accent,#ffca64);border-color:var(--accent,#ffca64);color:var(--ground,#0b0e13);}.ds-primary:hover,.ds-primary:focus{background:#ffdb91;border-color:#ffdb91;color:var(--ground,#0b0e13);}.ds-primary:focus-visible{outline:2px solid var(--accent,#ffca64);outline-offset:4px;}:host-context([data-theme=\"light\"]) .ds-primary{color:var(--surface,#fffefa);}:host-context([data-theme=\"light\"]) .ds-primary:hover,:host-context([data-theme=\"light\"]) .ds-primary:focus{background:#754500;border-color:#754500;color:#fffefa;}",
+      "refersTo": "button-primary"
+    },
+    {
+      "name": "Secondary action",
+      "kind": "button",
+      "description": "A restrained bordered alternative for working actions.",
+      "html": "<button class=\"ds-secondary\" type=\"button\">Manage products</button>",
+      "css": ".ds-secondary{font-family:Inter,sans-serif;font-size:13px;font-weight:600;line-height:1.5;display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:44px;padding:10px 18px;border:1px solid;border-radius:5px;text-decoration:none;transition:background-color .16s ease-out,border-color .16s ease-out,color .16s ease-out;background:transparent;border-color:var(--line,#363d48);color:var(--ink,#eeeef0);}.ds-secondary:hover{background:var(--raised,#1f2530);border-color:var(--muted,#aab2be);color:var(--ink,#eeeef0);}.ds-secondary:focus-visible{outline:2px solid var(--accent,#ffca64);outline-offset:4px;}",
+      "refersTo": "button-secondary"
+    },
+    {
+      "name": "Destructive action",
+      "kind": "button",
+      "description": "Danger semantics for deletion without a solid competing accent.",
+      "html": "<button class=\"ds-danger\" type=\"button\">Delete</button>",
+      "css": ".ds-danger{font-family:Inter,sans-serif;font-size:13px;font-weight:600;line-height:1.5;display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:44px;padding:10px 18px;border:1px solid;border-radius:5px;text-decoration:none;transition:background-color .16s ease-out,border-color .16s ease-out,color .16s ease-out;background:#ffa2a810;border-color:#ffa2a85c;color:var(--danger,#ffa2a8);}.ds-danger:hover{background:#ffa2a822;border-color:var(--danger,#ffa2a8);}.ds-danger:focus-visible{outline:2px solid var(--accent,#ffca64);outline-offset:4px;}:host-context([data-theme=\"light\"]) .ds-danger{background:#ad253807;border-color:#ad25384d;}:host-context([data-theme=\"light\"]) .ds-danger:hover{background:#ad253814;}",
+      "refersTo": "button-danger"
+    },
+    {
+      "name": "Labelled field",
+      "kind": "input",
+      "description": "Visible label, grounded input and supporting hint.",
+      "html": "<div class=\"ds-field\"><label for=\"ds-quantity\">Quantity</label><input id=\"ds-quantity\" type=\"number\" min=\"1\" value=\"1\" /><p>Choose the number of units.</p></div>",
+      "css": ".ds-field{font-family:Inter,sans-serif;color:var(--ink,#eeeef0);max-width:320px;}.ds-field label{display:block;font-size:13px;font-weight:500;margin-bottom:8px;}.ds-field input{width:100%;min-height:46px;border:1px solid var(--line,#363d48);border-radius:5px;background:var(--ground,#0b0e13);color:var(--ink,#eeeef0);padding:10px 12px;font:15px/1.6 Inter,sans-serif;caret-color:var(--accent,#ffca64);}.ds-field input:focus{border-color:var(--accent,#ffca64);}.ds-field input:disabled,.ds-field input[readonly]{background:var(--raised,#1f2530);color:var(--muted,#aab2be);}.ds-field p{color:var(--muted,#aab2be);font-size:12px;margin:8px 0 0;}.ds-field input:focus-visible{outline:2px solid var(--accent,#ffca64);outline-offset:4px;}",
+      "refersTo": "field"
+    },
+    {
+      "name": "Task navigation",
+      "kind": "nav",
+      "description": "Text destinations with muted defaults and accent selection.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Administration\"><a class=\"ds-active\" href=\"#products\">Products</a><a href=\"#categories\">Categories</a><a href=\"#orders\">Orders</a></nav>",
+      "css": ".ds-nav{display:grid;gap:6px;font-family:Inter,sans-serif;max-width:232px;}.ds-nav a{display:flex;align-items:center;min-height:48px;color:var(--muted,#aab2be);padding:10px 14px;border:1px solid transparent;border-radius:6px;font-size:14px;text-decoration:none;transition:background-color .16s ease-out,border-color .16s ease-out,color .16s ease-out;}.ds-nav a:hover{color:var(--ink,#eeeef0);background:var(--surface,#151921);}.ds-nav a.ds-active{border-color:var(--accent,#ffca64);color:var(--accent,#ffca64);background:#ffca6408;}.ds-nav a:focus-visible{outline:2px solid var(--accent,#ffca64);outline-offset:4px;}:host-context([data-theme=\"light\"]) .ds-nav a.ds-active{background:#9256000a;}"
+    },
+    {
+      "name": "Category filter",
+      "kind": "chip",
+      "description": "Pressed category uses an amber border while preserving its label.",
+      "html": "<button class=\"ds-category\" type=\"button\" aria-pressed=\"true\">All products</button>",
+      "css": ".ds-category{font:13px/1.6 Inter,sans-serif;border:1px solid var(--line,#363d48);padding:10px 18px;background:transparent;border-radius:5px;color:var(--muted,#aab2be);min-height:44px;transition:background-color .16s ease-out,border-color .16s ease-out,color .16s ease-out;}.ds-category:hover{background:var(--surface,#151921);color:var(--ink,#eeeef0);}.ds-category[aria-pressed=true]{color:var(--accent,#ffca64);border-color:var(--accent,#ffca64);}.ds-category:focus-visible{outline:2px solid var(--accent,#ffca64);outline-offset:4px;}"
+    },
+    {
+      "name": "Category badge",
+      "kind": "chip",
+      "description": "Compact non-interactive metadata on a raised tone.",
+      "html": "<span class=\"ds-badge\">Rice &amp; grains</span>",
+      "css": ".ds-badge{display:inline-flex;align-items:center;font:500 12px/1.6 Inter,sans-serif;padding:5px 10px;border:1px solid var(--line,#363d48);border-radius:4px;background:var(--raised,#1f2530);color:var(--ink,#eeeef0);white-space:normal;}",
+      "refersTo": "badge"
+    },
+    {
+      "name": "Form panel",
+      "kind": "card",
+      "description": "A flat bordered grouping used for editing and authentication.",
+      "html": "<section class=\"ds-panel\"><h2>Contact details</h2><p>Keep your account information up to date.</p></section>",
+      "css": ".ds-panel{border:1px solid var(--line,#363d48);border-radius:8px;background:var(--surface,#151921);color:var(--ink,#eeeef0);padding:28px;}.ds-panel h2{font:400 32px/1.13 Bebas,sans-serif;letter-spacing:.012em;margin:0 0 24px;}.ds-panel p{font:15px/1.6 Inter,sans-serif;color:var(--muted,#aab2be);margin:0 0 16px;}@media(max-width:640px){.ds-panel{padding:20px;}}@media(max-width:360px){.ds-panel{padding:16px;}}",
+      "refersTo": "panel"
+    },
+    {
+      "name": "Administration ledger",
+      "kind": "custom",
+      "description": "A ruled task row with count and management action; illustrative count is sample data.",
+      "html": "<section class=\"ds-ledger\"><div class=\"ds-ledger-row\"><div><h2>Products</h2><p>Keep prices, images and stock up to date.</p></div><span class=\"ds-ledger-count\">16</span><a class=\"ds-ledger-action\" href=\"#products\">Manage products</a></div></section>",
+      "css": ".ds-ledger{border-top:1px solid var(--line,#363d48);color:var(--ink,#eeeef0);}.ds-ledger-row{display:grid;grid-template-columns:1fr auto auto;gap:36px;align-items:center;border-bottom:1px solid var(--line,#363d48);padding:24px 0;}.ds-ledger h2{margin:0 0 5px;font:400 28px/1.13 Bebas,sans-serif;letter-spacing:.012em;}.ds-ledger p{margin:0;color:var(--muted,#aab2be);font:13px/1.6 Inter,sans-serif;}.ds-ledger-count{font:400 44px/1 Bebas,sans-serif;min-width:60px;text-align:right;font-variant-numeric:tabular-nums;}.ds-ledger-action{font-family:Inter,sans-serif;font-size:13px;font-weight:600;line-height:1.5;display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:44px;padding:10px 18px;border:1px solid;border-radius:5px;text-decoration:none;transition:background-color .16s ease-out,border-color .16s ease-out,color .16s ease-out;background:transparent;border-color:var(--line,#363d48);color:var(--ink,#eeeef0);}.ds-ledger-action:hover{background:var(--raised,#1f2530);border-color:var(--muted,#aab2be);}.ds-ledger-action:focus-visible{outline:2px solid var(--accent,#ffca64);outline-offset:4px;}@media(max-width:640px){.ds-ledger-row{grid-template-columns:1fr auto;gap:16px;padding:20px 0;}.ds-ledger-action{grid-column:1/-1;justify-self:start;}.ds-ledger h2{font-size:26px;}.ds-ledger-count{font-size:40px;}}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Catalogue shelves",
+    "overview": "Mudi combines browsable grocery artwork with clear working records. Condensed headings provide character; neutral body text, visible labels and ruled surfaces keep shopping, ordering and administration readable. The Mudi name and existing basket mark remain the identity.\n\nDark mode uses ink surfaces and pale amber. Light mode uses warm paper and deep amber, with the same information hierarchy and controls. Catalogue composition belongs to the [shared-interface surface brief](.impeccable/surfaces/mudi-views-shared-layout-cshtml.md); other routes use the layout their task needs.",
+    "keyCharacteristics": [
+      "Condensed display lettering paired with neutral, readable forms.",
+      "Semantic light and dark themes shared by customer, admin and Identity pages.",
+      "Restrained borders, small corners and tonal surfaces.",
+      "Product facts and administrative actions remain available on small screens."
+    ],
+    "rules": [
+      {
+        "name": "The Theme Pair Rule",
+        "body": "Use the active semantic ground, surface, raised, line, ink, muted and accent roles together. A theme change changes the palette, not the hierarchy.",
+        "section": "colors"
+      },
+      {
+        "name": "The Reading Voice Rule",
+        "body": "Use Bebas Neue for large headings and Inter for product names, prices, form labels and working records. Keep commercial facts in the readable body voice.",
+        "section": "typography"
+      },
+      {
+        "name": "The Local Lift Rule",
+        "body": "Keep resting forms and ledgers flat. Reserve the soft shadow for the engaged product artwork.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do use the active theme roles for every customer, admin and account surface.",
+      "Do keep product name, price, unit and stock visible while supporting artwork copy is disclosed.",
+      "Do retain visible form labels, keyboard focus, table cell labels and accessible names on icon controls.",
+      "Do use ruled records and task-specific grids where they help administration, checkout or account work.",
+      "Do preserve the selected Bebas Neue and Inter pairing and the existing factual product content.",
+      "Do preserve state and information when reduced motion removes animation."
+    ],
+    "donts": [
+      "Don't reduce the opacity of neighbouring shelf text or its ancestor containers; only artwork is attenuated.",
+      "Don't hide essential product facts or primary actions behind hover-only disclosure.",
+      "Don't turn the catalogue's title-card arrangement into a mandatory composition for every route.",
+      "Don't use shadows as the default treatment for buttons, forms or administrative records.",
+      "Don't present demo stock, prices or catalogue counts as production claims."
+    ]
+  }
+}

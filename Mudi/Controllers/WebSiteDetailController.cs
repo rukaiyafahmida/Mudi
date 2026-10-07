@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Mudi_DataAccess.Repository.IRepository;
 using Mudi_Models;
 using Mudi_Models.ViewModels;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace Mudi.Controllers
 {
+    [Authorize(Roles = WC.AdminRole)]
     public class WebSiteDetailController : Controller
     {
         private readonly IWebSiteDetailRepository _webDRepo;
@@ -39,6 +41,7 @@ namespace Mudi.Controllers
         {
             var obj = _webDRepo.FirstOrDefault(u => u.Id == id);
 
+            if (obj == null) return NotFound();
             WebSiteDetailVM = new WebSiteDetailVM();
             WebSiteDetailVM.WebSiteDetailId = id;
             WebSiteDetailVM.AboutUs = obj.AboutUs;
@@ -49,16 +52,17 @@ namespace Mudi.Controllers
         //POST - EDIT
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditAboutUsPost(WebSiteDetailVM WebSiteDetailVM)
+        public IActionResult EditAboutUsPost(WebSiteDetailVM WebSiteDetailVM)
         {
             var obj = _webDRepo.FirstOrDefault(u => u.Id == WebSiteDetailVM.WebSiteDetailId);
+            if (obj == null) return NotFound();
             obj.AboutUs = WebSiteDetailVM.AboutUs;
             _webDRepo.Update(obj);
             _webDRepo.Save();
             TempData[WC.Success] = "About Us Edited successfully";
             return RedirectToAction("Index");
 
-            TempData[WC.Error] = "Error while editing category";
+
             //return View(obj);
 
         }
@@ -68,6 +72,7 @@ namespace Mudi.Controllers
             
             var obj = _webDRepo.FirstOrDefault(u => u.Id == id);
 
+            if (obj == null) return NotFound();
             WebSiteDetailVM = new WebSiteDetailVM();
             WebSiteDetailVM.WebSiteDetailId = id;
             WebSiteDetailVM.ContactUs = obj.ContactUs;
@@ -82,13 +87,14 @@ namespace Mudi.Controllers
         {
                 
                 var obj = _webDRepo.FirstOrDefault(u => u.Id == WebSiteDetailVM.WebSiteDetailId);
+                if (obj == null) return NotFound();
                 obj.ContactUs = WebSiteDetailVM.ContactUs;
                 _webDRepo.Update(obj);
                 _webDRepo.Save();
                 TempData[WC.Success] = "Contact Us Edited successfully";
                 return RedirectToAction("Index");
             
-            TempData[WC.Error] = "Error while editing category";
+
             //return View(obj);
 
         }

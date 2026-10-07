@@ -17,9 +17,11 @@ namespace Mudi.Controllers
     {
 
         private readonly ICategoryRepository _catRepo;
-        public CategoryController(ICategoryRepository catRepo)
+        private readonly IProductRepository _prodRepo;
+        public CategoryController(ICategoryRepository catRepo, IProductRepository prodRepo)
         {
             _catRepo = catRepo;
+            _prodRepo = prodRepo;
         }
         public IActionResult Index()
         {
@@ -110,6 +112,11 @@ namespace Mudi.Controllers
             if (obj == null)
             {
                 return NotFound();
+            }
+            if (_prodRepo.GetAll(p => p.CategoryId == obj.Id).Any())
+            {
+                TempData[WC.Error] = "Move or delete this category's products before deleting the category.";
+                return RedirectToAction(nameof(Index));
             }
             _catRepo.Remove(obj);
             _catRepo.Save();

@@ -1,143 +1,15 @@
-﻿@model Mudi_Models.ViewModels.ProductUserVM
-@using Mudi_Utility
+@model Mudi_Models.ViewModels.ProductUserVM
+@{ ViewData["Title"] = "Checkout"; }
+<a class="back-link" asp-action="Index"><i class="fas fa-arrow-left" aria-hidden="true"></i>Back to cart</a><div class="page-heading"><div><h1>Checkout</h1><p>Confirm your delivery details and review your order.</p></div></div>
+<form method="post"><div asp-validation-summary="All" class="text-danger"></div><div class="checkout-layout"><section class="panel"><h2>Delivery details</h2><div class="field-grid">
+<div class="field"><label asp-for="ApplicationUser.FullName">Full name</label><input asp-for="ApplicationUser.FullName" type="text" autocomplete="name" class="form-control" required /><span asp-validation-for="ApplicationUser.FullName" class="text-danger"></span></div>
+<div class="field"><label asp-for="ApplicationUser.PhoneNumber">Phone number</label><input asp-for="ApplicationUser.PhoneNumber" type="tel" autocomplete="tel" class="form-control" required /><span asp-validation-for="ApplicationUser.PhoneNumber" class="text-danger"></span></div>
+<div class="field"><label asp-for="ApplicationUser.Email">Email address</label><input asp-for="ApplicationUser.Email" type="email" autocomplete="email" class="form-control" required /><span asp-validation-for="ApplicationUser.Email" class="text-danger"></span></div>
+<div class="field"><label asp-for="ApplicationUser.StreetAddress">Street address</label><input asp-for="ApplicationUser.StreetAddress" type="text" autocomplete="street-address" class="form-control" required /><span asp-validation-for="ApplicationUser.StreetAddress" class="text-danger"></span></div>
+<div class="field"><label asp-for="ApplicationUser.City">City</label><input asp-for="ApplicationUser.City" type="text" autocomplete="address-level2" class="form-control" required /><span asp-validation-for="ApplicationUser.City" class="text-danger"></span></div>
+<div class="field"><label asp-for="ApplicationUser.PostalCode">Postal code</label><input asp-for="ApplicationUser.PostalCode" type="text" autocomplete="postal-code" class="form-control" required /><span asp-validation-for="ApplicationUser.PostalCode" class="text-danger"></span></div>
 
-<form method="post">
-    <br />
-    <div class="backgroundWhiteBorder">
-        <div class="container">
-            <div class="card">
-                <div class="card-header bg-dark text-light ml-0 row container">
-                    <div class="col-6">
-                        <i class="fa fa-shopping-cart"></i> &nbsp;
-                        Order Summary
-                    </div>
-                    <div class="col-6 text-right">
-                        <a asp-action="Index" asp-controller="Cart" class="btn btn-outline-info btn-sm">Back to Cart</a>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="container rounded p-2">
-                        <div class="row">
-                            <div class="col-12 col-lg-7 pb-4">
-                                <div class="row">
-                                    <h4 class="d-flex justify-content-between align-items-center mb-3">
-                                        <span class="text-info">User Details:</span>
-                                    </h4>
-                                </div>
-                                <div class="row my-1">
-                                    <div class="col-3">
-                                        <label>Name</label>
-                                    </div>
-                                    <div class="col-9">
-                                        <input asp-for="ApplicationUser.FullName" required type="text" class="form-control" />
-                                        <span asp-validation-for="ApplicationUser.FullName" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="row my-1">
-                                    <div class="col-3">
-                                        <label>Phone</label>
-                                    </div>
-                                    <div class="col-9">
-                                        <input asp-for="ApplicationUser.PhoneNumber" required type="text" class="form-control" />
-                                        <span asp-validation-for="ApplicationUser.PhoneNumber" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="row my-1">
-                                    <div class="col-3">
-                                        <label>Email</label>
-                                    </div>
-                                    <div class="col-9">
-                                        <input asp-for="ApplicationUser.Email" type="text" class="form-control" />
-                                        <span asp-validation-for="ApplicationUser.Email" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                
-                                    <div class="row my-1">
-                                        <div class="col-3">
-                                            <label>Address</label>
-                                        </div>
-                                        <div class="col-9">
-                                            <input asp-for="ApplicationUser.StreetAddress" required type="text" class="form-control" />
-                                            <span asp-validation-for="ApplicationUser.StreetAddress" class="text-danger"></span>
-                                        </div>
-                                    </div>
-
-                                    <div class="row my-1">
-                                        <div class="col-3">
-                                            <label>City</label>
-                                        </div>
-                                        <div class="col-9">
-                                            <input asp-for="ApplicationUser.City" required type="text" class="form-control" />
-                                            <span asp-validation-for="ApplicationUser.City" class="text-danger"></span>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="row my-1">
-                                        <div class="col-3">
-                                            <label>Poastal Code</label>
-                                        </div>
-                                        <div class="col-9">
-                                            <input asp-for="ApplicationUser.PostalCode" required type="text" class="form-control" />
-                                            <span asp-validation-for="ApplicationUser.PostalCode" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                
-                            </div>
-                            <div class="col-12 col-lg-5 row">
-                                <div class="col-12">
-                                    <h4 class="d-flex justify-content-between align-items-center mb-3">
-                                        <span class="text-info">Summary:</span>
-                                    </h4>
-                                    <ul class="list-group mb-3">
-                                        @{ var orderTotal = 0.0;}
-
-                                        @for (int i = 0; i < Model.ProductList.Count(); i++)
-                                        {
-                                            <input type="hidden" asp-for="@Model.ProductList[i].Id" />
-                                            <input type="hidden" asp-for="@Model.ProductList[i].Name" />
-                                            <input type="hidden" asp-for="@Model.ProductList[i].Price" />
-                                            <input type="hidden" asp-for="@Model.ProductList[i].TempQty" />
-                                            <li class="list-group-item d-flex justify-content-between">
-                                                <div>
-                                                    <h6 class="my-0">@Model.ProductList[i].Name</h6>
-
-                                                    <small class="text-muted">Qty: @Model.ProductList[i].TempQty</small>
-
-                                                </div>
-
-                                                <span class="text-muted">৳ @(Model.ProductList[i].Price * Model.ProductList[i].TempQty)</span>
-
-                                            </li>
-                                            orderTotal += Model.ProductList[i].Price * Model.ProductList[i].TempQty;
-                                        }
-                                        <li class="list-group-item d-flex justify-content-between bg-light">
-                                            <small class="text-info"> Total (BDT)</small>
-                                            <strong class="text-info">৳ @orderTotal</strong>
-                                        </li>
-
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <div class="row">
-                        <div class="col-12 col-md-5 offset-md-7">
-                            
-                                <button class="btn btn-success form-control" id="submit-button">Order</button>
-
-                            
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</form>
-
-
-@section Scripts{
-    <partial name="_ValidationScriptsPartial" />
-}
+</div></section><aside class="summary-panel"><h2>Your order</h2>
+@for (var i = 0; i < Model.ProductList.Count; i++) { <input type="hidden" asp-for="ProductList[i].Id" /><input type="hidden" asp-for="ProductList[i].Name" /><input type="hidden" asp-for="ProductList[i].Price" /><input type="hidden" asp-for="ProductList[i].TempQty" /><div class="summary-item"><div><strong>@Model.ProductList[i].Name</strong><small>Quantity: @Model.ProductList[i].TempQty</small></div><span class="money">৳ @((Model.ProductList[i].Price * Model.ProductList[i].TempQty).ToString("N2"))</span></div> }
+<div class="summary-total"><span>Total (BDT)</span><span class="money">৳ @Model.ProductList.Sum(p => p.Price * p.TempQty).ToString("N2")</span></div><button type="submit" class="btn btn-primary" id="submit-button">Place order <i class="fas fa-arrow-right" aria-hidden="true"></i></button></aside></div></form>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

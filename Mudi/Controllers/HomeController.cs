@@ -130,6 +130,7 @@ namespace Mudi.Controllers
             };
 
 
+            if (DetailsVM.Product == null) return NotFound();
             foreach (var item in shoppingCartList)
             {
                 if (item.ProductId == id)
@@ -151,6 +152,7 @@ namespace Mudi.Controllers
         }
 
         [HttpPost, ActionName("Details")]
+        [ValidateAntiForgeryToken]
         public IActionResult DetailsPost(int id, DetailsVM detailsVM)
         {
             List<ShoppingCart> shoppingCartList = new List<ShoppingCart>();
@@ -160,14 +162,27 @@ namespace Mudi.Controllers
                 //if there are products in the session and user is not logged in 
                 shoppingCartList = HttpContext.Session.Get<List<ShoppingCart>>(WC.SessionCart);
             }
-            shoppingCartList.Add(new ShoppingCart { ProductId = id, Qty = detailsVM.Product.TempQty });
+            var product = _prodRepo.Find(id);
+            if (product == null) return NotFound();
+            var quantity = detailsVM.Product?.TempQty ?? 0;
+            var existing = shoppingCartList.FirstOrDefault(x => x.ProductId == id);
+            var totalQuantity = quantity + (existing?.Qty ?? 0);
+            if (quantity < 1 || totalQuantity > 100 || totalQuantity > product.Stock)
+                return BadRequest("Choose a quantity within the available stock (maximum 100).");
+            if (existing == null)
+                shoppingCartList.Add(new ShoppingCart { ProductId = id, Qty = quantity });
+            else
+                existing.Qty = totalQuantity;
             HttpContext.Session.Set(WC.SessionCart, shoppingCartList);
 
             if (User.IsInRole(WC.CustomerRole))
             {
-                var claimsIdentity = (ClaimsIdentity)User.Identity;
-                var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-                _cartRepo.Add(new Cart { ProductId = id, Qty = detailsVM.Product.TempQty, ApplicationUserId =claim.Value});
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var cart = _cartRepo.FirstOrDefault(u => u.ApplicationUserId == userId && u.ProductId == id);
+                if (cart == null)
+                    _cartRepo.Add(new Cart { ProductId = id, Qty = totalQuantity, ApplicationUserId = userId });
+                else
+                    cart.Qty = totalQuantity;
                 _cartRepo.Save();
             }
             TempData[WC.Success] = "Item add to cart successfully";
@@ -193,7 +208,7 @@ namespace Mudi.Controllers
                 var claimsIdentity = (ClaimsIdentity)User.Identity;
                 var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
                 var obj= _cartRepo.FirstOrDefault(u=>u.ApplicationUserId == claim.Value && u.ProductId==id);
-                _cartRepo.Remove(obj);
+                if (obj != null) _cartRepo.Remove(obj);
                 _cartRepo.Save();
             }
             HttpContext.Session.Set(WC.SessionCart, shoppingCartList);
@@ -226,6 +241,14 @@ namespace Mudi.Controllers
         [ActionName("ContactUs")]
         public async Task<IActionResult> ContactUsPost(ContactUsVM ContactUsVM)
         {
+            if (ContactUsVM.ApplicationUser == null ||
+                string.IsNullOrWhiteSpace(ContactUsVM.ApplicationUser.FullName) ||
+                string.IsNullOrWhiteSpace(ContactUsVM.ApplicationUser.Email) ||
+                string.IsNullOrWhiteSpace(ContactUsVM.Subject) || string.IsNullOrWhiteSpace(ContactUsVM.Message))
+            {
+                ModelState.AddModelError("", "Please fill in your name, email, subject and message.");
+                return View("ContactUs", ContactUsVM);
+            }
             var PathToTemplate = _webHostEnvironment.WebRootPath + Path.DirectorySeparatorChar.ToString()
                 + "templates" + Path.DirectorySeparatorChar.ToString() +
                 "ContactMail.html";
@@ -247,10 +270,10 @@ namespace Mudi.Controllers
 
 
             string messageBody = string.Format(HtmlBody,
-                ContactUsVM.ApplicationUser.FullName,
-                ContactUsVM.ApplicationUser.Email,
-                ContactUsVM.ApplicationUser.PhoneNumber,
-                message.ToString());
+                System.Net.WebUtility.HtmlEncode(ContactUsVM.ApplicationUser.FullName),
+                System.Net.WebUtility.HtmlEncode(ContactUsVM.ApplicationUser.Email),
+                System.Net.WebUtility.HtmlEncode(ContactUsVM.ApplicationUser.PhoneNumber),
+                System.Net.WebUtility.HtmlEncode(message.ToString()));
 
             await _emailSender.SendEmailAsync(WC.EmailAdmin, subject, messageBody);
 
