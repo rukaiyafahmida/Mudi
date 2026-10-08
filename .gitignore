@@ -338,3 +338,20 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+# Local development data and tools
+.dotnet/
+.nuget/
+.cli/
+**/App_Data/
+**/mudi-local.db*
+**/appsettings.Local.json
+.env
+
+__pycache__/
+
+# Local design captures and reference boards
+.impeccable/review/
+.impeccable/reference/
+.impeccable/config.local.json
+.impeccable/config.json
+.impeccable/planning/

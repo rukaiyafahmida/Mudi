@@ -22,9 +22,12 @@ namespace Mudi.Controllers
 
         private readonly IProductRepository _prodRepo;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public ProductController(IProductRepository prodRepo, IWebHostEnvironment webHostEnvironment)
+        private readonly IOrderDetailRepository _orderDRepo;
+        public ProductController(IProductRepository prodRepo, IWebHostEnvironment webHostEnvironment,
+            IOrderDetailRepository orderDRepo)
         {
             _prodRepo = prodRepo;
+            _orderDRepo = orderDRepo;
             _webHostEnvironment = webHostEnvironment;
         }
 
@@ -93,7 +96,13 @@ namespace Mudi.Controllers
                 if (productVM.Product.Id == 0)
                 {
                     //Creating
-                    string upload = webRootPath + WC.ImagePath;
+                    if (files.Count == 0 || files[0].Length == 0)
+                    {
+                        ModelState.AddModelError("Product.Image", "Choose a product image.");
+                        productVM.CategorySelectList = _prodRepo.GetAllDropdownList(WC.CategoryName);
+                        return View(productVM);
+                    }
+                    string upload = Path.Combine(webRootPath, "images", "product");
                     string fileName = Guid.NewGuid().ToString();
                     string extension = Path.GetExtension(files[0].FileName);
 
@@ -109,9 +118,10 @@ namespace Mudi.Controllers
                 {
                     var objFromDb = _prodRepo.FirstOrDefault(u => u.Id == productVM.Product.Id, isTracking: false);
 
+                    if (objFromDb == null) return NotFound();
                     if (files.Count > 0)
                     {
-                        string upload = webRootPath + WC.ImagePath;
+                        string upload = Path.Combine(webRootPath, "images", "product");
                         string fileName = Guid.NewGuid().ToString();
                         string extension = Path.GetExtension(files[0].FileName);
 
@@ -171,7 +181,12 @@ namespace Mudi.Controllers
                 return NotFound();
             }
 
-            string upload = _webHostEnvironment.WebRootPath + WC.ImagePath;
+            if (_orderDRepo.GetAll(d => d.ProductId == obj.Id).Any())
+            {
+                TempData[WC.Error] = "Products used in orders cannot be deleted.";
+                return RedirectToAction(nameof(Index));
+            }
+            string upload = Path.Combine(_webHostEnvironment.WebRootPath, "images", "product");
             var oldFile = Path.Combine(upload, obj.Image);
 
             if (System.IO.File.Exists(oldFile))

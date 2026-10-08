@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using System.IO;
+using Microsoft.AspNetCore.DataProtection;
 using Mudi_Utility;
 using Mudi_DataAccess;
 using System;
@@ -32,14 +34,23 @@ namespace Mudi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo(
+                Path.Combine(AppContext.BaseDirectory, "App_Data", "keys")));
+            var provider = Configuration["Database:Provider"] ?? "SqlServer";
             services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(
-                Configuration.GetConnectionString("DefaultConnection")));
+            {
+                if (provider.Equals("Sqlite", StringComparison.OrdinalIgnoreCase))
+                    options.UseSqlite(Configuration.GetConnectionString("SqliteConnection"));
+                else if (provider.Equals("SqlServer", StringComparison.OrdinalIgnoreCase))
+                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+                else
+                    throw new InvalidOperationException($"Unsupported database provider: {provider}");
+            });
             services.AddIdentity<IdentityUser, IdentityRole>()
                        .AddDefaultTokenProviders().AddDefaultUI()
                        .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.AddTransient<IEmailSender, EmailSender>();
+            services.AddHttpClient<IEmailSender, EmailSender>();
 
             services.AddDistributedMemoryCache();
             services.AddHttpContextAccessor();
@@ -62,12 +73,18 @@ namespace Mudi
             services.AddScoped<IWebSiteDetailRepository, WebSiteDetailRepository>();
             services.AddScoped<IDbInitializer, DbInitializer>();
 
-            services.AddAuthentication().AddFacebook(Options =>
+            var facebook = Configuration.GetSection("Authentication:Facebook");
+            if (!string.IsNullOrWhiteSpace(facebook["AppId"]) &&
+                !string.IsNullOrWhiteSpace(facebook["AppSecret"]))
             {
-                Options.AppId = "339788990810019";
-                Options.AppSecret = "423f11f6692a5151bf16004bd8727be0";
-            });
+                services.AddAuthentication().AddFacebook(options =>
+                {
+                    options.AppId = facebook["AppId"];
+                    options.AppSecret = facebook["AppSecret"];
+                });
+            }
 
+            services.AddRazorPages();
             services.AddControllersWithViews();
         }
 
@@ -84,7 +101,9 @@ namespace Mudi
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            app.UseHttpsRedirection();
+            if (!env.IsDevelopment())
+                app.UseHttpsRedirection();
+            Directory.CreateDirectory(Path.Combine(env.WebRootPath, "images", "product"));
             app.UseStaticFiles();
 
             app.UseRouting();
